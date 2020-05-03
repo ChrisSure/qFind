@@ -1,0 +1,26 @@
+version: '3.3'
+services:
+    admin-nginx:
+        build:
+            context: docker/development/admin-nginx
+        ports:
+            - "1111:80"
+        volumes:
+            - ./admin:/app/admin
+        depends_on:
+            - php-fpm
+    api-nginx:
+        build:
+            context: docker/development/api-nginx
+        ports:
+            - "9999:80"
+        volumes:
+            - ./api:/app/api
+        depends_on:
+            - php-fpm
+    php-fpm:
+        build:
+            context: docker/development/php-fpm
+        volumes:
+        - ./admin:/app/admin
+        - ./api:/app/api
