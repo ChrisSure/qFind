@@ -18,4 +18,6 @@ docker-pull:
 
 
 
-### docker-compose run --rm api-php-fpm
+### docker-compose run --rm php-fpm
+
+### docker exec -it  ny-find_php-fpm_1 sh
