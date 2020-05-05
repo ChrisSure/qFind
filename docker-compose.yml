@@ -1,0 +1,39 @@
+version: '3.3'
+services:
+    admin-nginx:
+        build:
+            context: ${PWD}/docker/development/admin-nginx
+        ports:
+            - "1111:80"
+        volumes:
+            - ./admin:/app/admin
+        depends_on:
+            - php-fpm
+    api-nginx:
+        build:
+            context: ${PWD}/docker/development/api-nginx
+        ports:
+            - "9999:80"
+        volumes:
+            - ./api:/app/api
+        depends_on:
+            - php-fpm
+    php-fpm:
+        build:
+            context: ${PWD}/docker/development/php-fpm
+        volumes:
+            - ./admin:/app/admin
+            - ./api:/app/api
+        depends_on:
+            - mysql
+    mysql:
+        image: mysql:5.7
+        volumes:
+            - ${PWD}/storage/mysql:/var/lib/mysql
+        environment:
+            - "MYSQL_ROOT_PASSWORD=secret"
+            - "MYSQL_USER=tkuku"
+            - "MYSQL_PASSWORD=secret"
+            - "MYSQL_DATABASE=nyfind"
+        ports:
+            - "33061:3306"
