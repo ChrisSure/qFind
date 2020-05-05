@@ -20,4 +20,4 @@ docker-pull:
 
 ### docker-compose run --rm php-fpm
 
-### docker exec -it  ny-find_php-fpm_1 sh
+### docker-compose run --rm php-fpm sh - enter inside container

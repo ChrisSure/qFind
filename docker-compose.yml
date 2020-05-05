@@ -2,7 +2,7 @@ version: '3.3'
 services:
     admin-nginx:
         build:
-            context: docker/development/admin-nginx
+            context: ${PWD}/docker/development/admin-nginx
         ports:
             - "1111:80"
         volumes:
@@ -11,7 +11,7 @@ services:
             - php-fpm
     api-nginx:
         build:
-            context: docker/development/api-nginx
+            context: ${PWD}/docker/development/api-nginx
         ports:
             - "9999:80"
         volumes:
@@ -20,7 +20,20 @@ services:
             - php-fpm
     php-fpm:
         build:
-            context: docker/development/php-fpm
+            context: ${PWD}/docker/development/php-fpm
         volumes:
-        - ./admin:/app/admin
-        - ./api:/app/api
+            - ./admin:/app/admin
+            - ./api:/app/api
+        depends_on:
+            - mysql
+    mysql:
+        image: mysql:5.7
+        volumes:
+            - ${PWD}/storage/mysql:/var/lib/mysql
+        environment:
+            - "MYSQL_ROOT_PASSWORD=secret"
+            - "MYSQL_USER=tkuku"
+            - "MYSQL_PASSWORD=secret"
+            - "MYSQL_DATABASE=nyfind"
+        ports:
+            - "33061:3306"
