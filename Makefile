@@ -21,3 +21,6 @@ docker-pull:
 ### docker-compose run --rm php-fpm
 
 ### docker-compose run --rm php-fpm sh - enter inside container
+
+###  php bin/console make:migration
+###  php bin/console doctrine:migrations:migrate
