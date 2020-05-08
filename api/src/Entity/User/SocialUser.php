@@ -45,6 +45,8 @@ class SocialUser
      */
     private $token;
 
+    public static $PROVIDER_FACEBOOK = "facebook";
+    public static $PROVIDER_GOOGLE = "google";
 
     /**
      * @var array
@@ -107,7 +109,7 @@ class SocialUser
      * @param mixed $name
      * @return SocialUser
      */
-    public function setSocialName($name): self
+    public function setName($name): self
     {
         $this->name = $name;
         return $this;
@@ -125,7 +127,7 @@ class SocialUser
      * @param mixed $image
      * @return SocialUser
      */
-    public function setSocialImage($image): self
+    public function setImage($image): self
     {
         $this->image = $image;
         return $this;
@@ -143,7 +145,7 @@ class SocialUser
      * @param mixed $token
      * @return SocialUser
      */
-    public function setSocialToken($token): self
+    public function setToken($token): self
     {
         $this->token = $token;
         return $this;
