@@ -23,8 +23,10 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+        // Set User
         $user = new User();
-        $user->setEmail($this->faker->email);
+        $user->setEmail("user@gmail.com");
+        $user->setRoles([$user::$ROLE_USER]);
         $user->setPasswordHash($this->encoder->encodePassword($user, '123'));
         $user->setStatus($user::$STATUS_ACTIVE);
         $user->onPrePersist();
@@ -35,11 +37,36 @@ class AppFixtures extends Fixture
         $socialUser->setName($this->faker->name);
         $socialUser->setImage($this->faker->image());
         $socialUser->setToken($this->faker->sha256);
-
         $socialUser->setUser($user);
 
         $manager->persist($user);
         $manager->persist($socialUser);
+
+
+        // Set Admin
+        $admin = new User();
+        $admin->setEmail("admin@gmail.com");
+        $admin->setRoles([$user::$ROLE_ADMIN]);
+        $admin->setPasswordHash($this->encoder->encodePassword($user, '123'));
+        $admin->setStatus($user::$STATUS_ACTIVE);
+        $admin->onPrePersist();
+        $admin->onPreUpdate();
+
+        $manager->persist($admin);
+
+
+        // Set Super admin
+        $superAdmin = new User();
+        $superAdmin->setEmail("super_admin@gmail.com");
+        $superAdmin->setRoles([$user::$ROLE_SUPER_ADMIN]);
+        $superAdmin->setPasswordHash($this->encoder->encodePassword($user, '123'));
+        $superAdmin->setStatus($user::$STATUS_ACTIVE);
+        $superAdmin->onPrePersist();
+        $superAdmin->onPreUpdate();
+
+        $manager->persist($superAdmin);
+
+
         $manager->flush();
     }
 }
