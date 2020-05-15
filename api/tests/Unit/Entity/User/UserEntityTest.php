@@ -16,7 +16,10 @@ class UserEntityTest extends TestCase
         $this->faker = Factory::create();
     }
 
-    public function testEntity(): void
+    /**
+     * @test
+     */
+    public function checkEntity(): void
     {
         $user = new User();
         $user->setEmail($email = $this->faker->email);

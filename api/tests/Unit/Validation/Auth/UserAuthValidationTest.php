@@ -15,7 +15,10 @@ class UserAuthValidationTest extends TestCase
         $this->faker = Factory::create();
     }
 
-    public function testSuccessValidate(): void
+    /**
+     * @test
+     */
+    public function successValidate(): void
     {
         $validate = new UserAuthValidation();
         $data = ['email' => $this->faker->email, 'password' => $this->faker->password];
@@ -24,7 +27,10 @@ class UserAuthValidationTest extends TestCase
         $this->assertEquals(0, $result->count());
     }
 
-    public function testFailureValidate(): void
+    /**
+     * @test
+     */
+    public function failureValidate(): void
     {
         $validate = new UserAuthValidation();
         $data = ['email' => $this->faker->title, 'password' => $this->faker->password];

@@ -16,7 +16,10 @@ class SocialUserEntityTest extends TestCase
         $this->faker = Factory::create();
     }
 
-    public function testEntity(): void
+    /**
+     * @test
+     */
+    public function checkEntity(): void
     {
         $socialUser = new SocialUser();
         $socialUser->setProvider($provider = $socialUser::$PROVIDER_FACEBOOK);
