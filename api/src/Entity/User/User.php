@@ -35,6 +35,11 @@ class User implements UserInterface
     private $email;
 
     /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
      */
@@ -58,6 +63,10 @@ class User implements UserInterface
      */
     private $updated_at;
 
+    public static $ROLE_USER = "ROLE_USER";
+    public static $ROLE_ADMIN = "ROLE_ADMIN";
+    public static $ROLE_SUPER_ADMIN = "ROLE_SUPER_ADMIN";
+
     public static $STATUS_NEW = "new";
     public static $STATUS_ACTIVE = "active";
     public static $STATUS_BLOCKED = "blocked";
@@ -76,16 +85,6 @@ class User implements UserInterface
         return $this->social;
     }
 
-    /**
-     * @param SocialUser $social
-     * @return User
-     */
-    public function setSocial(SocialUser $social): self
-    {
-        $this->social = $social;
-        return $this;
-    }
-
     public function getEmail(): ?string
     {
         return $this->email;
@@ -94,6 +93,13 @@ class User implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
@@ -142,9 +148,16 @@ class User implements UserInterface
     }
 
 
-    public function getRoles()
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        // TODO: Implement getRoles() method.
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        //$roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
 
     public function getPassword()

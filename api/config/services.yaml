@@ -4,7 +4,11 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    jwt_secret: '%env(JWT_SECRET)%'
+    jwt_expire: '%env(JWT_EXPIRE)%'
 
+    salt_left: '%env(SALT_LEFT)%'
+    salt_right: '%env(SALT_RIGHT)%'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -25,3 +29,13 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Service\Auth\JWTService:
+        arguments:
+            $jwtSecret: '%jwt_secret%'
+            $jwtExpire: '%jwt_expire%'
+
+    App\Service\Auth\PasswordHashService:
+        arguments:
+            $saltLeft: '%salt_left%'
+            $saltRight: '%salt_right%'

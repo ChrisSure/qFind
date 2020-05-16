@@ -15,13 +15,3 @@ docker-build:
 	docker-compose build
 docker-pull:
 	docker-compose pull
-
-
-
-### docker-compose run --rm php-fpm
-
-### docker-compose run --rm php-fpm sh - enter inside container
-
-###  php bin/console make:migration
-###  php bin/console doctrine:migrations:migrate
-###  php bin/console doctrine:fixtures:load
