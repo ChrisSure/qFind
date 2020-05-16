@@ -15,9 +15,3 @@ docker-build:
 	docker-compose build
 docker-pull:
 	docker-compose pull
-
-
-
-### docker-compose run --rm php-fpm
-
-### docker-compose run --rm php-fpm sh - enter inside container
