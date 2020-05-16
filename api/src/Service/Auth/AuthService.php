@@ -26,6 +26,7 @@ class AuthService
 
     /**
      * AuthService constructor.
+     *
      * @param UserRepository $userRepository
      * @param PasswordHashService $passwordHashService
      * @param JWTService $jwtService
@@ -43,6 +44,7 @@ class AuthService
 
     /**
      * Login user
+     *
      * @param array $data
      * @return string
      */
@@ -54,6 +56,7 @@ class AuthService
 
     /**
      * Check user credentials
+     *
      * @param array $data
      * @return User
      * @throws NotFoundHttpException

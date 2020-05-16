@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\User\SocialUser;
 use App\Entity\User\User;
+use App\Service\Auth\PasswordHashService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -11,23 +12,39 @@ use Faker\Factory;
 
 class AppFixtures extends Fixture
 {
-    private $encoder;
+    /**
+     * @var PasswordHashService
+     */
+    private $passwordHashService;
 
+    /**
+     * @var \Faker\Generator
+     */
     private $faker;
 
-    public function __construct(UserPasswordEncoderInterface $encoder)
+    /**
+     * AppFixtures constructor.
+     *
+     * @param PasswordHashService $passwordHashService
+     */
+    public function __construct(PasswordHashService $passwordHashService)
     {
-        $this->encoder = $encoder;
+        $this->passwordHashService = $passwordHashService;
         $this->faker = Factory::create();
     }
 
+    /**
+     * Load fixture
+     *
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         // Set User
         $user = new User();
         $user->setEmail("user@gmail.com");
         $user->setRoles([$user::$ROLE_USER]);
-        $user->setPasswordHash($this->encoder->encodePassword($user, '123'));
+        $user->setPasswordHash($this->passwordHashService->hashPassword($user, '123'));
         $user->setStatus($user::$STATUS_ACTIVE);
         $user->onPrePersist();
         $user->onPreUpdate();
@@ -47,7 +64,7 @@ class AppFixtures extends Fixture
         $admin = new User();
         $admin->setEmail("admin@gmail.com");
         $admin->setRoles([$user::$ROLE_ADMIN]);
-        $admin->setPasswordHash($this->encoder->encodePassword($user, '123'));
+        $admin->setPasswordHash($this->passwordHashService->hashPassword($user, '123'));
         $admin->setStatus($user::$STATUS_ACTIVE);
         $admin->onPrePersist();
         $admin->onPreUpdate();
@@ -59,7 +76,7 @@ class AppFixtures extends Fixture
         $superAdmin = new User();
         $superAdmin->setEmail("super_admin@gmail.com");
         $superAdmin->setRoles([$user::$ROLE_SUPER_ADMIN]);
-        $superAdmin->setPasswordHash($this->encoder->encodePassword($user, '123'));
+        $superAdmin->setPasswordHash($this->passwordHashService->hashPassword($user, '123'));
         $superAdmin->setStatus($user::$STATUS_ACTIVE);
         $superAdmin->onPrePersist();
         $superAdmin->onPreUpdate();

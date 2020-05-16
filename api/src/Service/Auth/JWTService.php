@@ -7,9 +7,27 @@ use \Firebase\JWT\JWT;
 
 class JWTService
 {
-    private $secret = "ny_find_key";
+    /**
+     * @var string $jwtSecret
+     */
+    private $jwtSecret;
 
-    private $expire = 86400;
+    /**
+     * @var int $jwtExpire
+     */
+    private $jwtExpire;
+
+    /**
+     * JWTService constructor.
+     *
+     * @param $jwtSecret
+     * @param $jwtExpire
+     */
+    public function __construct($jwtSecret, $jwtExpire)
+    {
+        $this->jwtSecret = $jwtSecret;
+        $this->jwtExpire = $jwtExpire;
+    }
 
     /**
      * Decode jwt token
@@ -19,7 +37,7 @@ class JWTService
      */
     public function decode(string $apiToken): object
     {
-        return JWT::decode($apiToken, $this->secret, array('HS256'));
+        return JWT::decode($apiToken, $this->jwtSecret, array('HS256'));
     }
 
     /**
@@ -35,10 +53,10 @@ class JWTService
             $data['iat'] = time();
         }
         if (!isset($data['exp'])) {
-            $data['exp'] = $data['iat'] + $this->expire;
+            $data['exp'] = $data['iat'] + $this->jwtExpire;
         }
 
-        return JWT::encode($data, $this->secret);
+        return JWT::encode($data, $this->jwtSecret);
     }
 
     /**

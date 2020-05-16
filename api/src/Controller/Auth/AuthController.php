@@ -28,6 +28,7 @@ class AuthController
 
     /**
      * AuthController constructor.
+     *
      * @param AuthService $authService
      * @param JWTService $jwtService
      */
@@ -38,8 +39,9 @@ class AuthController
     }
 
     /**
-     * @Route("/signin")
+     * @Route("/signin",  methods={"POST"})
      * Sign in user
+     *
      * @param Request $request
      * @return JsonResponse
      */

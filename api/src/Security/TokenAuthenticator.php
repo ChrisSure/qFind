@@ -27,6 +27,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     /**
      * TokenAuthenticator constructor.
+     *
      * @param JWTService $jwtService
      * @param UserRepository $userRepository
      */
@@ -40,6 +41,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      * Called on every request to decide if this authenticator should be
      * used for the request. Returning false will cause this authenticator
      * to be skipped.
+     *
      * @param Request $request
      * @return bool
      */
@@ -51,6 +53,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     /**
      * Called on every request. Return whatever credentials you want to
      * be passed to getUser() as $credentials.
+     *
      * @param Request $request
      * @return array
      */
@@ -65,6 +68,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     /**
      * Get user
+     *
      * @param mixed $credentials
      * @param UserProviderInterface $userProvider
      * @return UserInterface|void|null
@@ -84,6 +88,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     /**
      * Check credentials
+     *
      * @param mixed $credentials
      * @param UserInterface $user
      * @return bool
@@ -95,6 +100,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     /**
      * Success authentification
+     *
      * @param Request $request
      * @param TokenInterface $token
      * @param string $providerKey
@@ -107,6 +113,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     /**
      * Failure authentification
+     *
      * @param Request $request
      * @param AuthenticationException $exception
      * @return JsonResponse|Response|null
@@ -122,6 +129,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     /**
      * Called when authentication is needed, but it's not sent
+     *
      * @param Request $request
      * @param AuthenticationException|null $authException
      * @return JsonResponse|Response
@@ -136,6 +144,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
+     * Support remember me
+     *
      * @return bool
      */
     public function supportsRememberMe(): bool
