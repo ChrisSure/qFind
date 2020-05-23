@@ -12,4 +12,6 @@ RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-di
 
 RUN apk add --update nodejs npm
 
+RUN apk add nano
+
 WORKDIR /app

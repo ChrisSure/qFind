@@ -4,7 +4,7 @@ services:
         build:
             context: ${PWD}/docker/development/admin-nginx
         ports:
-            - "1111:80"
+            - "8888:80"
         volumes:
             - ./admin:/app/admin
         depends_on:

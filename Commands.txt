@@ -6,3 +6,5 @@ php bin/console make:migration                      ---- create migrations with 
 php bin/console doctrine:migrations:migrate         ---- import migrate to db
 php bin/console doctrine:fixtures:load              ---- load fixture to db
 php bin/phpunit                                     ---- run php unit tests
+
+docker inspect <container_id>                       ---- detail information about container
