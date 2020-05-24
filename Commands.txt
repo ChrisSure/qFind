@@ -8,3 +8,4 @@ php bin/console doctrine:fixtures:load              ---- load fixture to db
 php bin/phpunit                                     ---- run php unit tests
 
 docker inspect <container_id>                       ---- detail information about container
+docker ps -a                                        ---- list of containers docker
