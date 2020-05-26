@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Service\Auth\AuthService;
 use Illuminate\Support\Facades\Http;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
 {
@@ -17,12 +19,12 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function showLoginForm()
+    public function showLoginForm(): View
     {
         return view('auth.login');
     }
 
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): RedirectResponse
     {
         $data = $request->only(['email', 'password', 'remember']);
 
@@ -37,5 +39,10 @@ class AuthController extends Controller
             $this->authService->setToken($response['token'], isset($data['remember']) ?? $data['remember']);
             return redirect()->route('admin.home');
         }
+    }
+
+    public function logout()
+    {
+        $this->authService->logout();
     }
 }

@@ -15,7 +15,7 @@ class Controller extends BaseController
 
     public function __construct()
     {
-        $this->apiHost = env('API_HOST', null);
+        $this->apiHost = env('API_HOST', 'http://172.20.0.9');
     }
 
 }
