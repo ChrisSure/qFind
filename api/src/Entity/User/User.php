@@ -5,6 +5,7 @@ namespace App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\User\UserRepository")
@@ -78,9 +79,9 @@ class User implements UserInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getSocial(): ArrayCollection
+    public function getSocial(): Collection
     {
         return $this->social;
     }

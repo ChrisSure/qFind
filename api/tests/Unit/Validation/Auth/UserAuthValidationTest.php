@@ -21,7 +21,7 @@ class UserAuthValidationTest extends TestCase
     public function successValidate(): void
     {
         $validate = new UserAuthValidation();
-        $data = ['email' => $this->faker->email, 'password' => $this->faker->password];
+        $data = ['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'site'];
         $result = $validate->validate($data);
 
         $this->assertEquals(0, $result->count());
@@ -33,7 +33,7 @@ class UserAuthValidationTest extends TestCase
     public function failureValidate(): void
     {
         $validate = new UserAuthValidation();
-        $data = ['email' => $this->faker->title, 'password' => $this->faker->password];
+        $data = ['email' => $this->faker->title, 'password' => $this->faker->password, 'type' => 'site'];
         $result = $validate->validate($data);
 
         $this->assertEquals(1, $result->count());

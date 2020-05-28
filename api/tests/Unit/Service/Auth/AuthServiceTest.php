@@ -45,7 +45,41 @@ class AuthServiceTest extends TestCase
         $this->jwtService->shouldReceive('create')->andReturn($this->faker->name);
 
         $authService = new AuthService($this->userRepositoryMock, $this->passwordHashServiceMock, $this->jwtService);
-        $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password]);
+        $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'site']);
+
+        $this->assertTrue(is_string($result));
+    }
+
+    /**
+     * @test
+     */
+    public function loginAdminAsAdmin(): void
+    {
+        $this->userMock->shouldReceive('getStatus')->andReturn(User::$STATUS_ACTIVE);
+        $this->userMock->shouldReceive('getRoles')->andReturn([User::$ROLE_ADMIN]);
+        $this->userRepositoryMock->shouldReceive('findOneBy')->andReturn($this->userMock);
+        $this->passwordHashServiceMock->shouldReceive('checkPassword')->andReturn(true);
+        $this->jwtService->shouldReceive('create')->andReturn($this->faker->name);
+
+        $authService = new AuthService($this->userRepositoryMock, $this->passwordHashServiceMock, $this->jwtService);
+        $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'admin']);
+
+        $this->assertTrue(is_string($result));
+    }
+
+    /**
+     * @test
+     */
+    public function loginAdminAsSuperAdmin(): void
+    {
+        $this->userMock->shouldReceive('getStatus')->andReturn(User::$STATUS_ACTIVE);
+        $this->userMock->shouldReceive('getRoles')->andReturn([User::$ROLE_SUPER_ADMIN]);
+        $this->userRepositoryMock->shouldReceive('findOneBy')->andReturn($this->userMock);
+        $this->passwordHashServiceMock->shouldReceive('checkPassword')->andReturn(true);
+        $this->jwtService->shouldReceive('create')->andReturn($this->faker->name);
+
+        $authService = new AuthService($this->userRepositoryMock, $this->passwordHashServiceMock, $this->jwtService);
+        $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'admin']);
 
         $this->assertTrue(is_string($result));
     }
@@ -63,7 +97,7 @@ class AuthServiceTest extends TestCase
         $this->expectException(NotFoundHttpException::class);
 
         $authService = new AuthService($this->userRepositoryMock, $this->passwordHashServiceMock, $this->jwtService);
-        $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password]);
+        $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'site']);
     }
 
     /**
@@ -79,6 +113,23 @@ class AuthServiceTest extends TestCase
         $this->expectException(AccessDeniedHttpException::class);
 
         $authService = new AuthService($this->userRepositoryMock, $this->passwordHashServiceMock, $this->jwtService);
-        $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password]);
+        $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'site']);
+    }
+
+    /**
+     * @test
+     */
+    public function uncorrectRoleNotAdmin(): void
+    {
+        $this->userMock->shouldReceive('getStatus')->andReturn(User::$STATUS_ACTIVE);
+        $this->userMock->shouldReceive('getRoles')->andReturn([User::$ROLE_USER]);
+        $this->userRepositoryMock->shouldReceive('findOneBy')->andReturn($this->userMock);
+        $this->passwordHashServiceMock->shouldReceive('checkPassword')->andReturn(true);
+        $this->jwtService->shouldReceive('create')->andReturn($this->faker->name);
+
+        $this->expectException(AccessDeniedHttpException::class);
+
+        $authService = new AuthService($this->userRepositoryMock, $this->passwordHashServiceMock, $this->jwtService);
+        $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'admin']);
     }
 }

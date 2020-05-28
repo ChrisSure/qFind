@@ -2,23 +2,16 @@
 
 namespace App\Tests\Functional\Controller\Auth;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\Functional\Base;
 
-class AuthControllerTest extends WebTestCase
+class AuthControllerTest extends Base
 {
-    private $client;
-
-    protected function setUp(): void
-    {
-        $this->client = static::createClient();
-    }
-
     /**
      * @test
      */
-    public function checkEntity(): void
+    public function signIn(): void
     {
-        $postData = ['email' => 'user@gmail.com', 'password' => '123'];
+        $postData = ['email' => 'user@gmail.com', 'password' => '123', 'type' => 'site'];
 
         $this->client->request(
             'POST',
