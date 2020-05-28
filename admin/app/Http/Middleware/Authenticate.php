@@ -2,20 +2,29 @@
 
 namespace App\Http\Middleware;
 
+use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Support\Facades\Cookie;
 
 class Authenticate extends Middleware
 {
-    /**
-     * Get the path the user should be redirected to when they are not authenticated.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string|null
-     */
-    protected function redirectTo($request)
+
+    public function handle($request, Closure $next)
     {
-        if (! $request->expectsJson()) {
-            return route('login');
+        $flag = $this->getState();
+
+        if (!$flag) {
+            return redirect('/');
         }
+
+        return $next($request);
+    }
+
+    private function getState(): ?string
+    {
+        $siteName = env('APP_NAME', null);
+        return (session($siteName . '_jwt_token') !== null)
+            ? session($siteName . '_jwt_token')
+            : Cookie::get($siteName . '_jwt_token');
     }
 }

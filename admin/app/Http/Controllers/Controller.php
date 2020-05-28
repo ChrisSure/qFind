@@ -10,4 +10,12 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    protected $apiHost;
+
+    public function __construct()
+    {
+        $this->apiHost = env('API_HOST', 'http://172.20.0.9');
+    }
+
 }

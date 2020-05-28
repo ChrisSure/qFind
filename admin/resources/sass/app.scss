@@ -1,1 +1,23 @@
-//
+@import "node_modules/bootstrap/scss/bootstrap";
+@import "colors";
+
+/* HEADER */
+header {
+    background: $main-purple;
+    padding: 15px 0;
+
+    & h1 {
+       color: $white;
+        text-align: center;
+    }
+}
+/* HEADER */
+
+/* lOGIN */
+.login {
+    border: 2px solid $main-purple;
+    border-radius: 5px;
+    padding: 40px;
+    margin-top: 50px;
+}
+/* lOGIN */
