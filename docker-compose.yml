@@ -4,7 +4,7 @@ services:
         build:
             context: ${PWD}/docker/development/admin-nginx
         ports:
-            - "1111:80"
+            - "8888:80"
         volumes:
             - ./admin:/app/admin
         depends_on:
@@ -18,6 +18,9 @@ services:
             - ./api:/app/api
         depends_on:
             - php-fpm
+        networks:
+            default:
+                ipv4_address: 172.20.0.9
     php-fpm:
         build:
             context: ${PWD}/docker/development/php-fpm
@@ -37,3 +40,8 @@ services:
             - "MYSQL_DATABASE=nyfind"
         ports:
             - "33061:3306"
+networks:
+    default:
+        ipam:
+            config:
+                - subnet: 172.20.0.9/16
