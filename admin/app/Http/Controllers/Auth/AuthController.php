@@ -30,7 +30,8 @@ class AuthController extends Controller
 
         $response = Http::asForm()->post($this->apiHost . '/auth/signin', [
             'email' => $data['email'],
-            'password' => $data['password']
+            'password' => $data['password'],
+            'type' => 'admin'
         ]);
 
         if (!empty($response['error'])) {

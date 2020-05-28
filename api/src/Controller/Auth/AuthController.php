@@ -5,6 +5,7 @@ namespace App\Controller\Auth;
 use App\Service\Auth\AuthService;
 use App\Service\Auth\JWTService;
 use App\Validation\Auth\UserAuthValidation;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/auth")
  */
-class AuthController
+class AuthController extends AbstractController
 {
     /**
      * @var AuthService
