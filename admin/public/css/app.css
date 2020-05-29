@@ -10933,11 +10933,29 @@ a.text-dark:focus {
   }
 }
 
+.padding-null {
+  padding: 0 !important;
+}
+
+.list-group-item.active {
+  background-color: #71489c;
+  border-color: #71489c;
+}
+
 /* HEADER */
 
 header {
   background: #71489c;
   padding: 15px 0;
+}
+
+header a {
+  color: #ffffff;
+}
+
+header a:hover {
+  text-decoration: none;
+  color: #ffffff;
 }
 
 header h1 {
@@ -10957,4 +10975,12 @@ header h1 {
 }
 
 /* lOGIN */
+
+/* MAIN */
+
+section {
+  margin-top: 50px;
+}
+
+/* MAIN */
 

@@ -1,13 +1,22 @@
 @import "node_modules/bootstrap/scss/bootstrap";
 @import "colors";
+@import "main";
 
 /* HEADER */
 header {
     background: $main-purple;
     padding: 15px 0;
 
+    & a {
+        color: $white;
+        &:hover {
+            text-decoration: none;
+            color: $white;
+        }
+    }
+
     & h1 {
-       color: $white;
+        color: $white;
         text-align: center;
     }
 }
@@ -21,3 +30,9 @@ header {
     margin-top: 50px;
 }
 /* lOGIN */
+
+/* MAIN */
+section {
+    margin-top: 50px;
+}
+/* MAIN */

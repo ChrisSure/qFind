@@ -17,7 +17,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1>Admin-Panel</h1>
+                    <h1><a href="/admin">Admin-Panel</a></h1>
                 </div>
             </div>
         </div>
@@ -26,7 +26,13 @@
     <section>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-4 offset-sm-4">
+            <div class="col-sm-2">
+                <div class="list-group">
+                    <a href="/admin" class="list-group-item list-group-item-action active">Home</a>
+                    <a href="/users" class="list-group-item list-group-item-action">Users</a>
+                </div>
+            </div>
+            <div class="col-sm-9 offset-sm-1">
                 @yield('content')
             </div>
         </div>
