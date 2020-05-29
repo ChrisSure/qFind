@@ -16,8 +16,11 @@
     <header>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12">
-                    <h1><a href="/admin">Admin-Panel</a></h1>
+                <div class="col-sm-6">
+                    <h1><a href="{{ route('admin.home') }}">Admin-Panel</a></h1>
+                </div>
+                <div class="col-sm-2 offset-sm-4">
+                    <a href="{{ route('admin.logout') }}" type="button" class="btn btn-danger">Danger</a>
                 </div>
             </div>
         </div>
@@ -28,8 +31,8 @@
         <div class="row">
             <div class="col-sm-2">
                 <div class="list-group">
-                    <a href="/admin" class="list-group-item list-group-item-action active">Home</a>
-                    <a href="/users" class="list-group-item list-group-item-action">Users</a>
+                    <a href="{{ route('admin.home') }}" class="list-group-item list-group-item-action active">Home</a>
+                    <a href="{{ route('admin.home') }}" class="list-group-item list-group-item-action">Users</a>
                 </div>
             </div>
             <div class="col-sm-9 offset-sm-1">

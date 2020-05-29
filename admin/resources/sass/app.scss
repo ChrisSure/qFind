@@ -17,7 +17,12 @@ header {
 
     & h1 {
         color: $white;
-        text-align: center;
+        text-align: left;
+    }
+
+    & a {
+        float: right;
+        color: $white !important;
     }
 }
 /* HEADER */

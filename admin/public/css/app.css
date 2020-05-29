@@ -10960,7 +10960,12 @@ header a:hover {
 
 header h1 {
   color: #ffffff;
-  text-align: center;
+  text-align: left;
+}
+
+header a {
+  float: right;
+  color: #ffffff !important;
 }
 
 /* HEADER */
