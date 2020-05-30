@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Facade;
  * Class User
  * @package App\Facades\Auth
  *
- * @method static void setUserData(string $token, object $data, $remember)
+ * @method static void setUserData(string $token, object $data)
  * @method static void removeData()
+ * @method static bool isAuth()
  * @method static int getId()
  * @method static string getEmail()
  * @method static string getRole()

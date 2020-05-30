@@ -20,7 +20,7 @@
                     <h1><a href="{{ route('admin.home') }}">Admin-Panel</a></h1>
                 </div>
                 <div class="col-sm-2 offset-sm-4">
-                    <a href="{{ route('admin.logout') }}" type="button" class="btn btn-danger">Danger</a>
+                    <a href="{{ route('admin.logout') }}" type="button" class="btn btn-danger">Logout</a>
                 </div>
             </div>
         </div>

@@ -19,14 +19,17 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function showLoginForm(): View
+    public function showLoginForm()
     {
+        if ($this->authService->isAuth()) {
+            return redirect()->route('admin.home');
+        }
         return view('auth.login');
     }
 
     public function login(LoginRequest $request): RedirectResponse
     {
-        $data = $request->only(['email', 'password', 'remember']);
+        $data = $request->only(['email', 'password']);
 
         $response = Http::asForm()->post($this->apiHost . '/auth/signin', [
             'email' => $data['email'],
@@ -37,7 +40,7 @@ class AuthController extends Controller
         if (!empty($response['error'])) {
             return redirect()->route('login')->with('error', $response['error']);
         } else {
-            $this->authService->setToken($response['token'], isset($data['remember']) ?? $data['remember']);
+            $this->authService->setToken($response['token']);
             return redirect()->route('admin.home');
         }
     }
