@@ -72,6 +72,24 @@ class User implements UserInterface
     public static $STATUS_ACTIVE = "active";
     public static $STATUS_BLOCKED = "blocked";
 
+    public static function statusList(): array
+    {
+        return [
+            self::$STATUS_NEW => 'new',
+            self::$STATUS_ACTIVE => 'active',
+            self::$STATUS_BLOCKED => 'blocked',
+        ];
+    }
+
+    public static function rolesList(): array
+    {
+        return [
+            self::$ROLE_USER => 'ROLE_USER',
+            self::$ROLE_ADMIN => 'ROLE_ADMIN',
+            self::$ROLE_SUPER_ADMIN => 'ROLE_SUPER_ADMIN',
+        ];
+    }
+
 
     public function getId(): ?int
     {

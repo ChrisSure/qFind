@@ -19,8 +19,12 @@ class AllUserControllerTest extends Base
         $this->client->followRedirect();
         $response = json_decode($this->client->getResponse()->getContent());
         $users = $response->users;
+        $statusList = $response->statusList;
+        $rolesList = $response->rolesList;
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
         $this->assertTrue(is_string($users));
+        $this->assertTrue(isset($statusList));
+        $this->assertTrue(isset($rolesList));
     }
 }

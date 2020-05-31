@@ -37,8 +37,19 @@ class UserService
      *
      * @return string
      */
-    public function all(): string
+    public function all($email, $status, $role, $page): string
     {
         return $this->serializeService->serialize($this->userRepository->findAll());
+    }
+
+    /**
+     * Return total users
+     *
+     * @return int
+     */
+    public function totalUsers(): int
+    {
+        return 3;
+        //return $this->userRepository->count();
     }
 }

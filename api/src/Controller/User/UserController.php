@@ -2,6 +2,7 @@
 
 namespace App\Controller\User;
 
+use App\Entity\User\User;
 use App\Service\User\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -36,7 +37,15 @@ class UserController extends AbstractController
      */
     public function all(Request $request): JsonResponse
     {
-        $users = $this->userService->all();
-        return new JsonResponse(['users' => $users], 200);
+        $email = $request->query->get('email');
+        $status = $request->query->get('status');
+        $role = $request->query->get('role');
+        $page = $request->query->get('page');
+
+        $users = $this->userService->all($email, $status, $role, $page);
+        $totalUsers = $this->userService->totalUsers();
+        $statusList = User::statusList();
+        $rolesList = User::rolesList();
+        return new JsonResponse(['users' => $users, 'statusList' => $statusList, 'rolesList' => $rolesList, 'totalUsers' => $totalUsers], 200);
     }
 }

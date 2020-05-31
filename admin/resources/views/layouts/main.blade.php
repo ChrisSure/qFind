@@ -32,10 +32,10 @@
             <div class="col-sm-2">
                 <div class="list-group">
                     <a href="{{ route('admin.home') }}" class="list-group-item list-group-item-action active">Home</a>
-                    <a href="{{ route('admin.home') }}" class="list-group-item list-group-item-action">Users</a>
+                    <a href="{{ route('admin.users') }}" class="list-group-item list-group-item-action">Users</a>
                 </div>
             </div>
-            <div class="col-sm-9 offset-sm-1">
+            <div class="col-sm-10">
                 @yield('content')
             </div>
         </div>

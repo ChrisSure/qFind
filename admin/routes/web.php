@@ -26,5 +26,7 @@ Route::group(
     function () {
         Route::get('/logout', '\App\Http\Controllers\Auth\AuthController@logout')->name('logout');
         Route::get('/', 'HomeController@index')->name('home');
+
+        Route::get('/users', 'User\UserController@index')->name('users');
     });
 
