@@ -36,10 +36,8 @@ class UserRepository extends ServiceEntityRepository
         return $user;
     }
 
-    public function getAll($email, $status, $role, $page)
+    public function getAll($email, $status, $role, $page = null)
     {
-        $offset = ($page - 1)  * $this->pageCount;
-
         $qb = $this->createQueryBuilder('u');
         if ($email) {
             $qb->andWhere('u.email LIKE :email')->setParameter('email', "%".$email."%");
@@ -51,7 +49,10 @@ class UserRepository extends ServiceEntityRepository
             $qb->andwhere('u.roles = :role')->setParameter('role', $role);
         }
 
-        $qb->setMaxResults($this->pageCount)->setFirstResult($offset);
+        if ($page) {
+            $offset = ($page - 1)  * $this->pageCount;
+            $qb->setMaxResults($this->pageCount)->setFirstResult($offset);
+        }
 
         return $qb->getQuery()
             ->getResult();

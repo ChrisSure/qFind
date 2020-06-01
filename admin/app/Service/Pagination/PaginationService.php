@@ -16,6 +16,19 @@ class PaginationService
         $this->limitPages = env('PAGE_COUNT', null);
     }
 
+    public function build(int $totalRecords)
+    {
+        $uriString = $this->prepareUriString();
+        $page = $this->getPage();
+        $totalPages =  ceil($totalRecords / $this->limitPages);
+
+        return [
+            'url' => $uriString,
+            'page' => $page,
+            'totalPages' => $totalPages
+        ];
+    }
+
     public function prepareUriString(): string
     {
         $query = $this->removePage($this->request->getQueryString());
@@ -32,11 +45,6 @@ class PaginationService
             }
         }
         return 1;
-    }
-
-    public function getTotalPages(int $totalRecords)
-    {
-        return ceil($totalRecords / $this->limitPages);
     }
 
     private function removePage(string $query = null): string

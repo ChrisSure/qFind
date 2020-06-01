@@ -20,27 +20,20 @@ class UserController extends Controller
 
     public function index(Request $request): View
     {
-        $uriString = $this->paginationService->prepareUriString();
-        $page = $this->paginationService->getPage();
-
         $email = ($request->get('email')) ?? $request->get('email');
         $status = ($request->get('status')) ?? $request->get('status');
         $role = ($request->get('role')) ?? $request->get('role');
+        $page = ($request->get('page')) ? $request->get('page') : 1;
 
         $response = Http::get($this->apiHost . '/users' . '?email=' . $email . '&status=' . $status . '&role=' . $role . '&page=' . $page);
-        $users = json_decode($response->json()['users']);
-        $statusList = $response->json()['statusList'];
-        $rolesList = $response->json()['rolesList'];
-        $totalPages = $this->paginationService->getTotalPages($response->json()['totalUsers']);
+        $paginationArray = $this->paginationService->build($response->json()['totalUsers']);
 
         return view('admin.user.index',
             [
-                'users' => $users,
-                'statusList' => $statusList,
-                'rolesList' => $rolesList,
-                'url' => $uriString,
-                'page' => $page,
-                'totalPages' => $totalPages
+                'users' => json_decode($response->json()['users']),
+                'statusList' => $response->json()['statusList'],
+                'rolesList' => $response->json()['rolesList'],
+                'paginationArray' => $paginationArray
             ]
         );
     }
