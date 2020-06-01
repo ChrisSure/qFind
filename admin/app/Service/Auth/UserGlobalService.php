@@ -19,7 +19,7 @@ class UserGlobalService
         session([self::$siteName . '_jwt_token' => $token]);
         session([self::$siteName . '_user_id' => $data->id]);
         session([self::$siteName . '_user_email' => $data->email]);
-        session([self::$siteName . '_user_role' => $data->roles[0]]);
+        session([self::$siteName . '_user_role' => $data->roles]);
         session([self::$siteName . '_user_iat' => $data->iat]);
         session([self::$siteName . '_user_exp' => $data->exp]);
     }
