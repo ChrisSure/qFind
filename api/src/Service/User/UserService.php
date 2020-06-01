@@ -39,17 +39,19 @@ class UserService
      */
     public function all($email, $status, $role, $page): string
     {
-        return $this->serializeService->serialize($this->userRepository->findAll());
+        return $this->serializeService->serialize($this->userRepository->getAll($email, $status, $role, $page));
     }
 
     /**
-     * Return total users
+     * Return count users
      *
+     * @param $email
+     * @param $status
+     * @param $role
      * @return int
      */
-    public function totalUsers(): int
+    public function totalUsers($email, $status, $role): int
     {
-        return 3;
-        //return $this->userRepository->count();
+        return $this->userRepository->getCountUsers($email, $status, $role);
     }
 }

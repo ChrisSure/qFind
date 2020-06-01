@@ -43,7 +43,7 @@ class UserController extends AbstractController
         $page = $request->query->get('page');
 
         $users = $this->userService->all($email, $status, $role, $page);
-        $totalUsers = $this->userService->totalUsers();
+        $totalUsers = $this->userService->totalUsers($email, $status, $role);
         $statusList = User::statusList();
         $rolesList = User::rolesList();
         return new JsonResponse(['users' => $users, 'statusList' => $statusList, 'rolesList' => $rolesList, 'totalUsers' => $totalUsers], 200);

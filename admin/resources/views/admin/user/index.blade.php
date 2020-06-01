@@ -46,6 +46,7 @@
         </div>
     </div>
 
+    @if(!(empty($users)))
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
@@ -61,7 +62,7 @@
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->status }}</td>
-                <td>{{ $user->roles[0] }}</td>
+                <td>{{ $user->roles }}</td>
             </tr>
         @endforeach
         </tbody>
@@ -73,10 +74,13 @@
                 <li class="page-item"><a class="page-link" href="{{$url}}page={{ $page - 1 }}">Previous</a></li>
             @endif
 
-            @if($page < $totalUsers )
+            @if($page < $totalPages )
                 <li class="page-item"><a class="page-link" href="{{$url}}page={{ $page + 1 }}">Next</a></li>
                 @endif
         </ul>
     </nav>
+    @else
+        <h4>Not records ...</h4>
+    @endif
 
 @endsection

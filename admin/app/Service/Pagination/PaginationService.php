@@ -8,9 +8,12 @@ class PaginationService
 {
     private $request;
 
+    private $limitPages;
+
     public function __construct(Request $request)
     {
         $this->request = $request;
+        $this->limitPages = env('PAGE_COUNT', null);
     }
 
     public function prepareUriString(): string
@@ -29,6 +32,11 @@ class PaginationService
             }
         }
         return 1;
+    }
+
+    public function getTotalPages(int $totalRecords)
+    {
+        return ceil($totalRecords / $this->limitPages);
     }
 
     private function removePage(string $query = null): string

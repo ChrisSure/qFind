@@ -23,7 +23,7 @@ class UserEntityTest extends TestCase
     {
         $user = new User();
         $user->setEmail($email = $this->faker->email);
-        $user->setRoles($role = ["ROLE_USER"]);
+        $user->setRoles($role = User::$ROLE_USER);
         $user->setPasswordHash($password = $this->faker->password);
         $user->setStatus($status = $user::$STATUS_ACTIVE);
 

@@ -31,7 +31,7 @@ class UserController extends Controller
         $users = json_decode($response->json()['users']);
         $statusList = $response->json()['statusList'];
         $rolesList = $response->json()['rolesList'];
-        $totalUsers = $response->json()['totalUsers'];
+        $totalPages = $this->paginationService->getTotalPages($response->json()['totalUsers']);
 
         return view('admin.user.index',
             [
@@ -40,7 +40,7 @@ class UserController extends Controller
                 'rolesList' => $rolesList,
                 'url' => $uriString,
                 'page' => $page,
-                'totalUsers' => $totalUsers
+                'totalPages' => $totalPages
             ]
         );
     }

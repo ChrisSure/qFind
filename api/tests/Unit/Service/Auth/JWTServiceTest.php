@@ -25,7 +25,7 @@ class JWTServiceTest extends TestCase
         $userMock = Mockery::mock(User::class);
         $userMock->shouldReceive('getId')->andReturn($this->faker->numberBetween());
         $userMock->shouldReceive('getEmail')->andReturn($this->faker->email);
-        $userMock->shouldReceive('getRoles')->andReturn([User::$ROLE_USER]);
+        $userMock->shouldReceive('getRoles')->andReturn(User::$ROLE_USER);
         $jwtService = new JWTService($this->faker->title, $this->faker->unixTime);
         $result = $jwtService->create($userMock);
 

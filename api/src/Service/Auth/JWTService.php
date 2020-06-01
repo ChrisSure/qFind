@@ -70,7 +70,7 @@ class JWTService
         $data = array(
             "id" => $user->getId(),
             "email" => $user->getEmail(),
-            "roles" => $user->getRoles(),
+            "role" => $user->getRoles(),
         );
         return $this->encode($data);
     }
