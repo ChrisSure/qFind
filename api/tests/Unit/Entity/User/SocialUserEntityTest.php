@@ -4,18 +4,10 @@ namespace App\Tests\Unit\Entity\User;
 
 use App\Entity\User\SocialUser;
 use App\Entity\User\User;
-use PHPUnit\Framework\TestCase;
-use Faker\Factory;
+use App\Tests\Unit\Base;
 
-class SocialUserEntityTest extends TestCase
+class SocialUserEntityTest extends Base
 {
-    private $faker;
-
-    protected function setUp(): void
-    {
-        $this->faker = Factory::create();
-    }
-
     /**
      * @test
      */

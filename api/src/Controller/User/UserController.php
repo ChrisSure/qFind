@@ -42,10 +42,19 @@ class UserController extends AbstractController
         $role = $request->query->get('role');
         $page = $request->query->get('page');
 
-        $users = $this->userService->all($email, $status, $role, $page);
-        $totalUsers = $this->userService->totalUsers($email, $status, $role);
-        $statusList = User::statusList();
-        $rolesList = User::rolesList();
-        return new JsonResponse(['users' => $users, 'statusList' => $statusList, 'rolesList' => $rolesList, 'totalUsers' => $totalUsers], 200);
+        try {
+            $users = $this->userService->all($email, $status, $role, $page);
+            $totalUsers = $this->userService->totalUsers($email, $status, $role);
+            return new JsonResponse(
+                [
+                    'users' => $users,
+                    'statusList' => User::statusList(),
+                    'rolesList' => User::rolesList(),
+                    'totalUsers' => $totalUsers
+                ],  JsonResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

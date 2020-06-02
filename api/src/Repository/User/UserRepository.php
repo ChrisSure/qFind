@@ -15,8 +15,15 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class UserRepository extends ServiceEntityRepository
 {
+    /**
+     * @var mixed
+     */
     private $pageCount;
 
+    /**
+     * UserRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
@@ -25,6 +32,7 @@ class UserRepository extends ServiceEntityRepository
 
     /**
      * Get user
+     *
      * @param $id
      * @return User
      */
@@ -36,7 +44,16 @@ class UserRepository extends ServiceEntityRepository
         return $user;
     }
 
-    public function getAll($email, $status, $role, $page = null)
+    /**
+     * Get all users
+     *
+     * @param $email
+     * @param $status
+     * @param $role
+     * @param null $page
+     * @return array
+     */
+    public function getAll($email, $status, $role, $page = null): array
     {
         $qb = $this->createQueryBuilder('u');
         if ($email) {
@@ -54,11 +71,20 @@ class UserRepository extends ServiceEntityRepository
             $qb->setMaxResults($this->pageCount)->setFirstResult($offset);
         }
 
-        return $qb->getQuery()
-            ->getResult();
+        return $qb->getQuery()->getResult();
     }
 
-    public function getCountUsers($email, $status, $role)
+    /**
+     * Get count users
+     *
+     * @param $email
+     * @param $status
+     * @param $role
+     * @return string
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getCountUsers($email, $status, $role): string
     {
         $qb = $this->createQueryBuilder('u')->select('COUNT(u)');
         if ($email) {
@@ -71,8 +97,7 @@ class UserRepository extends ServiceEntityRepository
             $qb->andwhere('u.roles = :role')->setParameter('role', $role);
         }
 
-        return $qb->getQuery()
-            ->getSingleScalarResult();
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
 }

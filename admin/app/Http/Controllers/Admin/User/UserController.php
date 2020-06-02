@@ -10,6 +10,9 @@ use Illuminate\View\View;
 
 class UserController extends Controller
 {
+    /**
+     * @var PaginationService
+     */
     private $paginationService;
 
     public function __construct(PaginationService $paginationService)

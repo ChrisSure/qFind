@@ -2,19 +2,11 @@
 
 namespace App\Tests\Unit\Validation\Auth;
 
+use App\Tests\Unit\Base;
 use App\Validation\Auth\UserAuthValidation;
-use PHPUnit\Framework\TestCase;
-use Faker\Factory;
 
-class UserAuthValidationTest extends TestCase
+class UserAuthValidationTest extends Base
 {
-    private $faker;
-
-    protected function setUp(): void
-    {
-        $this->faker = Factory::create();
-    }
-
     /**
      * @test
      */

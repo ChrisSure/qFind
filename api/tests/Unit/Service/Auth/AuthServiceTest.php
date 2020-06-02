@@ -7,16 +7,13 @@ use App\Repository\User\UserRepository;
 use App\Service\Auth\AuthService;
 use App\Service\Auth\JWTService;
 use App\Service\Auth\PasswordHashService;
-use PHPUnit\Framework\TestCase;
-use Faker\Factory;
+use App\Tests\Unit\Base;
 use Mockery;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AuthServiceTest extends TestCase
+class AuthServiceTest extends Base
 {
-    private $faker;
-
     private $userMock;
 
     private $userRepositoryMock;
@@ -27,7 +24,7 @@ class AuthServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->faker = Factory::create();
+        parent::setUp();
         $this->userMock = Mockery::mock(User::class);
         $this->userRepositoryMock = Mockery::mock(UserRepository::class);
         $this->passwordHashServiceMock = Mockery::mock(PasswordHashService::class);

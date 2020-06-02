@@ -3,19 +3,11 @@
 namespace App\Tests\Unit\Entity\User;
 
 use App\Entity\User\User;
+use App\Tests\Unit\Base;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\TestCase;
-use Faker\Factory;
 
-class UserEntityTest extends TestCase
+class UserEntityTest extends Base
 {
-    private $faker;
-
-    protected function setUp(): void
-    {
-        $this->faker = Factory::create();
-    }
-
     /**
      * @test
      */

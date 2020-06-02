@@ -35,6 +35,10 @@ class UserService
     /**
      * Get all users
      *
+     * @param $email
+     * @param $status
+     * @param $role
+     * @param $page
      * @return string
      */
     public function all($email, $status, $role, $page): string

@@ -68,7 +68,7 @@
         </tbody>
     </table>
 
-    @include('admin.include.pagination.pagination', ['url' => $paginationArray['url'], 'totalPages' => $paginationArray['totalPages'], 'page' => $paginationArray['page']])
+    @include('admin.include.pagination.pagination', ['paginationArray' => $paginationArray])
 
     @else
         <h4>Not records ...</h4>

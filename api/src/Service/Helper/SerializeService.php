@@ -13,8 +13,14 @@ use Symfony\Component\Serializer\Serializer;
  */
 class SerializeService
 {
+    /**
+     * @var Serializer
+     */
     private $serializer;
 
+    /**
+     * SerializeService constructor.
+     */
     public function __construct()
     {
         $encoders = [new XmlEncoder(), new JsonEncoder()];
@@ -24,6 +30,7 @@ class SerializeService
 
     /**
      * Serialize object in order to send by api
+     *
      * @param $entity
      * @return string
      */
@@ -39,6 +46,7 @@ class SerializeService
 
     /**
      * Deserialize object
+     *
      * @param $data
      * @param $entity
      * @param $type
