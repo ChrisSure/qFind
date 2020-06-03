@@ -12,4 +12,17 @@ class Base extends WebTestCase
     {
         $this->client = static::createClient();
     }
+
+    protected function signInAdmin(): string
+    {
+        $postData = ['email' => 'admin@gmail.com', 'password' => '123', 'type' => 'admin'];
+
+        $this->client->request(
+            'POST',
+            '/auth/signin',
+            $postData
+        );
+        $response = json_decode($this->client->getResponse()->getContent());
+        return $response->token;
+    }
 }

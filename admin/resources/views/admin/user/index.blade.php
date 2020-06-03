@@ -35,10 +35,14 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
+                    <div class="col-sm-3">
+                        <div class="form-group search-button">
                             <label class="col-form-label">&nbsp;</label><br />
                             <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">&nbsp;</label><br />
+                            <a href="{{ route('admin.users') }}" type="submit" class="btn btn-danger">Reset</a>
                         </div>
                     </div>
                 </div>

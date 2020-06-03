@@ -20,7 +20,7 @@ class UserEntityTest extends Base
         $user->setStatus($status = $user::$STATUS_ACTIVE);
 
         $this->assertEquals($email, $user->getEmail());
-        $this->assertEquals($role, $user->getRoles());
+        $this->assertEquals([$role], $user->getRoles());
         $this->assertEquals($password, $user->getPassword());
         $this->assertEquals($status, $user->getStatus());
 

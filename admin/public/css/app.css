@@ -10942,6 +10942,11 @@ a.text-dark:focus {
   border-color: #71489c;
 }
 
+.search-button {
+  float: left;
+  margin-right: 10px;
+}
+
 /* HEADER */
 
 header {

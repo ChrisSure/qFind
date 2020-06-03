@@ -53,7 +53,7 @@ class AuthServiceTest extends Base
     public function loginAdminAsAdmin(): void
     {
         $this->userMock->shouldReceive('getStatus')->andReturn(User::$STATUS_ACTIVE);
-        $this->userMock->shouldReceive('getRoles')->andReturn(User::$ROLE_ADMIN);
+        $this->userMock->shouldReceive('getRoles')->andReturn([User::$ROLE_ADMIN]);
         $this->userRepositoryMock->shouldReceive('findOneBy')->andReturn($this->userMock);
         $this->passwordHashServiceMock->shouldReceive('checkPassword')->andReturn(true);
         $this->jwtService->shouldReceive('create')->andReturn($this->faker->name);
@@ -70,7 +70,7 @@ class AuthServiceTest extends Base
     public function loginAdminAsSuperAdmin(): void
     {
         $this->userMock->shouldReceive('getStatus')->andReturn(User::$STATUS_ACTIVE);
-        $this->userMock->shouldReceive('getRoles')->andReturn(User::$ROLE_SUPER_ADMIN);
+        $this->userMock->shouldReceive('getRoles')->andReturn([User::$ROLE_SUPER_ADMIN]);
         $this->userRepositoryMock->shouldReceive('findOneBy')->andReturn($this->userMock);
         $this->passwordHashServiceMock->shouldReceive('checkPassword')->andReturn(true);
         $this->jwtService->shouldReceive('create')->andReturn($this->faker->name);
@@ -119,7 +119,7 @@ class AuthServiceTest extends Base
     public function uncorrectRoleNotAdmin(): void
     {
         $this->userMock->shouldReceive('getStatus')->andReturn(User::$STATUS_ACTIVE);
-        $this->userMock->shouldReceive('getRoles')->andReturn(User::$ROLE_USER);
+        $this->userMock->shouldReceive('getRoles')->andReturn([User::$ROLE_USER]);
         $this->userRepositoryMock->shouldReceive('findOneBy')->andReturn($this->userMock);
         $this->passwordHashServiceMock->shouldReceive('checkPassword')->andReturn(true);
         $this->jwtService->shouldReceive('create')->andReturn($this->faker->name);

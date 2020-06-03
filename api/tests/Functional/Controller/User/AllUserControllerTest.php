@@ -2,6 +2,7 @@
 
 namespace App\Tests\Functional\Controller\User;
 
+use App\Repository\User\UserRepository;
 use App\Tests\Functional\Base;
 
 class AllUserControllerTest extends Base
@@ -11,9 +12,14 @@ class AllUserControllerTest extends Base
      */
     public function all(): void
     {
+        $token = $this->signInAdmin();
+        //var_dump($token);exit();
         $this->client->request(
             'GET',
-            '/users'
+            '/users',
+            [],
+            [],
+            ['Authorization' => "Bearer " . $token]
         );
 
         $this->client->followRedirect();
