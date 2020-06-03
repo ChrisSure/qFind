@@ -3,7 +3,6 @@
 namespace App\Service\Auth;
 
 use App\Facades\Auth\User;
-use Illuminate\Support\Facades\Cookie;
 
 class AuthService
 {

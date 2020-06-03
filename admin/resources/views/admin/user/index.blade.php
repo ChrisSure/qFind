@@ -62,7 +62,7 @@
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->status }}</td>
-                <td>{{ $user->roles }}</td>
+                <td>{{ $user->roles[0] }}</td>
             </tr>
         @endforeach
         </tbody>

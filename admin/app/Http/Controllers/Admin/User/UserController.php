@@ -28,7 +28,9 @@ class UserController extends Controller
         $role = ($request->get('role')) ?? $request->get('role');
         $page = ($request->get('page')) ? $request->get('page') : 1;
 
-        $response = Http::get($this->apiHost . '/users' . '?email=' . $email . '&status=' . $status . '&role=' . $role . '&page=' . $page);
+        $response = Http::withToken($this->getToken())->get(
+            $this->apiHost . '/users' . '?email=' . $email . '&status=' . $status . '&role=' . $role . '&page=' . $page
+        );
         if ($response->clientError()) {
             abort($response->status(), $response->object()->message);
         } else {

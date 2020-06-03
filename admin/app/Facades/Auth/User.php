@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void setUserData(string $token, object $data)
  * @method static void removeData()
  * @method static bool isAuth()
+ * @method static string getToken()
  * @method static int getId()
  * @method static string getEmail()
  * @method static string getRole()
