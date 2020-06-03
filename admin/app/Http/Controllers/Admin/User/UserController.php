@@ -29,6 +29,7 @@ class UserController extends Controller
         $page = ($request->get('page')) ? $request->get('page') : 1;
 
         $response = Http::get($this->apiHost . '/users' . '?email=' . $email . '&status=' . $status . '&role=' . $role . '&page=' . $page);
+        dump($response); exit();
         $paginationArray = $this->paginationService->build($response->json()['totalUsers']);
 
         return view('admin.user.index',

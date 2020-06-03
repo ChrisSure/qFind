@@ -83,7 +83,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
         $data = $this->jwtService->decode($apiToken);
 
-        return $this->userRepository->findOneBy(['email' => $data['email']]);
+        return $this->userRepository->findOneBy(['email' => $data->email]);
     }
 
     /**
