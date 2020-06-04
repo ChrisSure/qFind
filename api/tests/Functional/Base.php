@@ -2,7 +2,10 @@
 
 namespace App\Tests\Functional;
 
+use App\Entity\User\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 
 class Base extends WebTestCase
 {
@@ -13,16 +16,28 @@ class Base extends WebTestCase
         $this->client = static::createClient();
     }
 
-    protected function signInAdmin(): string
+    /**
+     * Login a test user for secure routes
+     *
+     * @param string $role
+     */
+    protected function signIn(string $role): void
     {
-        $postData = ['email' => 'admin@gmail.com', 'password' => '123', 'type' => 'admin'];
+        $session = $this->client->getContainer()->get('session');
 
-        $this->client->request(
-            'POST',
-            '/auth/signin',
-            $postData
-        );
-        $response = json_decode($this->client->getResponse()->getContent());
-        return $response->token;
+        $documentManager = self::$container->get('doctrine');
+        $user = $documentManager->getRepository(User::class)->findOneBy(['email' => 'admin@gmail.com']);
+        $user->setRoles($role);
+
+        $firewallName = 'main';
+        $firewallContext = 'main';
+
+        $token = new PostAuthenticationGuardToken($user, $firewallName, $user->getRoles());
+        $session->set('_security_' . $firewallContext, serialize($token));
+        $session->save();
+
+        $cookie = new Cookie($session->getName(), $session->getId());
+        $this->client->getCookieJar()->set($cookie);
     }
+
 }

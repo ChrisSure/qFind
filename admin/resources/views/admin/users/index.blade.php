@@ -42,7 +42,7 @@
                         </div>
                         <div class="form-group">
                             <label class="col-form-label">&nbsp;</label><br />
-                            <a href="{{ route('admin.users') }}" type="submit" class="btn btn-danger">Reset</a>
+                            <a href="{{ route('admin.users.index') }}" type="submit" class="btn btn-danger">Reset</a>
                         </div>
                     </div>
                 </div>
@@ -64,9 +64,9 @@
         @foreach ($users as $user)
             <tr>
                 <td>{{ $user->id }}</td>
-                <td>{{ $user->email }}</td>
-                <td>{{ $user->status }}</td>
-                <td>{{ $user->roles[0] }}</td>
+                <td><a href="{{ route('admin.users.show', $user->id) }}">{{ $user->email }}</a></td>
+                <td><span class="badge badge-primary">{{ $user->status }}</span></td>
+                <td><span class="badge badge-success">{{ $user->roles[0] }}</span></td>
             </tr>
         @endforeach
         </tbody>

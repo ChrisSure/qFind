@@ -49,4 +49,17 @@ class UserServiceTest extends Base
 
         $this->assertEquals($count, $result);
     }
+
+    /**
+     * @test
+     */
+    public function singleUser()
+    {
+        $this->userRepositoryMock->shouldReceive('get')->andReturn($this->userMock);
+        $this->serializeServiceMock->shouldReceive('serialize')->andReturn(json_encode($this->userMock));
+        $userService = new UserService($this->userRepositoryMock, $this->serializeServiceMock);
+        $result = $userService->single(1);
+
+        $this->assertTrue(is_string($result));
+    }
 }

@@ -7,6 +7,7 @@ use App\Service\User\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
@@ -57,6 +58,22 @@ class UserController extends AbstractController
         } catch (\Exception $e) {
             return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
 
+    /**
+     * @Route("/{id}",  methods={"GET"})
+     * Get single users
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function single($id): JsonResponse
+    {
+        try {
+            $user = $this->userService->single($id);
+            return new JsonResponse(['user' => $user], JsonResponse::HTTP_OK);
+        } catch(NotFoundHttpException $e) {
+            return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
+        }
     }
 }

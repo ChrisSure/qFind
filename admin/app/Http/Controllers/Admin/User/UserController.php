@@ -35,7 +35,7 @@ class UserController extends Controller
             abort($response->status(), $response->object()->message);
         } else {
             $paginationArray = $this->paginationService->build($response->json()['totalUsers']);
-            return view('admin.user.index',
+            return view('admin.users.index',
                 [
                     'users' => json_decode($response->json()['users']),
                     'statusList' => $response->json()['statusList'],
@@ -43,6 +43,19 @@ class UserController extends Controller
                     'paginationArray' => $paginationArray
                 ]
             );
+        }
+    }
+
+    public function show($id): View
+    {
+        $response = Http::withToken($this->getToken())->get(
+            $this->apiHost . '/users/' . $id
+        );
+
+        if ($response->clientError()) {
+            abort($response->status(), $response->object()->error);
+        } else {
+            return view('admin.users.show', ['user' => json_decode($response['user'])]);
         }
     }
 }

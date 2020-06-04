@@ -58,4 +58,15 @@ class UserService
     {
         return $this->userRepository->getCountUsers($email, $status, $role);
     }
+
+    /**
+     * Get single user
+     *
+     * @param $id
+     * @return string
+     */
+    public function single($id): string
+    {
+        return $this->serializeService->serialize($this->userRepository->get($id));
+    }
 }
