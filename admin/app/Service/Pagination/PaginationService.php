@@ -8,19 +8,16 @@ class PaginationService
 {
     private $request;
 
-    private $limitPages;
-
     public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->limitPages = env('PAGE_COUNT', null);
     }
 
     public function build(int $totalRecords)
     {
         $uriString = $this->prepareUriString();
         $page = $this->getPage();
-        $totalPages =  ceil($totalRecords / $this->limitPages);
+        $totalPages = ceil($totalRecords / $this->getLimitPage());
 
         return [
             'url' => $uriString,
@@ -41,13 +38,13 @@ class PaginationService
         $query = explode('&', $this->request->getQueryString());
         foreach ($query as $value) {
             if (substr($value, 0, 4) === 'page') {
-                return  (int)(explode('=', $value)[1]);
+                return (int)(explode('=', $value)[1]);
             }
         }
         return 1;
     }
 
-    private function removePage(string $query = null): string
+    public function removePage(string $query = null): string
     {
         $query = explode('&', $query);
         foreach ($query as $key => $value) {
@@ -56,5 +53,10 @@ class PaginationService
             }
         }
         return implode('&', $query);
+    }
+
+    public function getLimitPage(): int
+    {
+        return env('PAGE_COUNT', 20);
     }
 }
