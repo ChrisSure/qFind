@@ -18,7 +18,9 @@
         </whitelist>
     </filter>
     <php>
+        <server name="APP_NAME" value="NY_FIND"/>
         <server name="APP_ENV" value="testing"/>
+        <server name="JWT_SECRET" value="wiqo3i4i39j9[fsjdfsdif343911"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
         <server name="CACHE_DRIVER" value="array"/>
         <server name="DB_CONNECTION" value="sqlite"/>

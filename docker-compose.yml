@@ -44,7 +44,7 @@ services:
     mysql-test:
         image: mysql:5.7
         volumes:
-            - ${PWD}/storage/mysql-test:/var/lib/mysql-test
+            - ${PWD}/storage/mysql-test:/var/lib/mysql
         environment:
             - "MYSQL_ROOT_PASSWORD=secret"
             - "MYSQL_USER=tkuku"
