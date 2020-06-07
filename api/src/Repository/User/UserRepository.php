@@ -100,4 +100,17 @@ class UserRepository extends ServiceEntityRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
+    /**
+     * Save user
+     * @param User $user
+     * @return void
+     */
+    public function save(User $user): void
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+    }
+
+
 }

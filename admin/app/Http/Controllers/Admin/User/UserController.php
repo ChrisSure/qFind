@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\User\CreateRequest;
 use App\Service\Pagination\PaginationService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
@@ -56,6 +58,36 @@ class UserController extends Controller
             abort($response->status(), $response->object()->error);
         } else {
             return view('admin.users.show', ['user' => json_decode($response['user'])]);
+        }
+    }
+
+    public function create(): View
+    {
+        $response = Http::withToken($this->getToken())->get(
+            $this->apiHost . '/users'
+        );
+        if ($response->clientError()) {
+            abort($response->status(), $response->object()->message);
+        } else {
+
+            return view('admin.users.create', ['rolesList' => $response->json()['rolesList'], 'statusList' => $response->json()['statusList']]);
+        }
+
+    }
+
+    public function store(CreateRequest $request): RedirectResponse
+    {
+        $response = Http::withToken($this->getToken())->asForm()->post($this->apiHost . '/users', [
+            'email' => $request['email'],
+            'password' => $request['password'],
+            'role' => $request['role'],
+            'status' => $request['status']
+        ]);
+
+        if (!$response->successful()) {
+            return redirect()->route('admin.users.create')->with('error', $response->object()->error);
+        } else {
+            return redirect()->route('admin.users.index')->with('success', $response['message']);
         }
     }
 }

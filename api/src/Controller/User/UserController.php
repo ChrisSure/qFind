@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Entity\User\User;
 use App\Service\User\UserService;
+use App\Validation\Auth\CreateUserValidation;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -74,6 +75,29 @@ class UserController extends AbstractController
             return new JsonResponse(['user' => $user], JsonResponse::HTTP_OK);
         } catch(NotFoundHttpException $e) {
             return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
+        }
+    }
+
+    /**
+     * @Route("",  methods={"POST"})
+     * Create users
+     *
+     * @return JsonResponse
+     */
+    public function create(Request $request): JsonResponse
+    {
+        $data = $request->request->all();
+
+        $violations = (new CreateUserValidation())->validate($data);
+        if ($violations->count() > 0) {
+            return new JsonResponse(["error" => (string)$violations], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        try {
+            $user = $this->userService->create($data);
+            return new JsonResponse(['message' => "Created successfull"], JsonResponse::HTTP_CREATED);
+        } catch(\InvalidArgumentException $e) {
+            return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 }
