@@ -43,7 +43,11 @@
         @if ($user->roles[0] === 'ROLE_USER' && $user->status === 'active')
             <a type="submit" href="{{ route('admin.users.block', $user->id) }}" class="btn btn-primary mb-3">Block</a>
         @endif
-        <a type="submit" href="{{ route('admin.users.destroy', $user->id) }}" class="btn btn-danger mb-3">Delete</a>
+        <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}">
+            @csrf
+            @method('DELETE')
+            <button class="btn btn-danger mb-3 actionRemove">Delete</button>
+        </form>
     @else
         <h4>Not record ...</h4>
     @endif

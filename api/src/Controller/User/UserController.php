@@ -102,6 +102,23 @@ class UserController extends AbstractController
     }
 
     /**
+     * @Route("/{id}",  methods={"DELETE"})
+     * Delete user
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function delete($id): JsonResponse
+    {
+        try {
+            $user = $this->userService->delete($id);
+            return new JsonResponse(['message' => "You successfull deleted user"], JsonResponse::HTTP_OK);
+        } catch(NotFoundHttpException $e) {
+            return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
+        }
+    }
+
+    /**
      * @Route("/{id}/activate",  methods={"GET"})
      * Activate user
      *

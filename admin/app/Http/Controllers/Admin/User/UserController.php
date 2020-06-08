@@ -115,4 +115,16 @@ class UserController extends Controller
         }
     }
 
+    public function destroy($id)
+    {
+        $response = Http::withToken($this->getToken())->delete(
+            $this->apiHost . '/users/' . $id
+        );
+        if ($response->clientError()) {
+            abort($response->status(), $response->object()->message);
+        } else {
+            return redirect()->route('admin.users.index')->with('success', $response['message']);
+        }
+    }
+
 }

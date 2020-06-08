@@ -102,6 +102,7 @@ class UserRepository extends ServiceEntityRepository
 
     /**
      * Save user
+     *
      * @param User $user
      * @return void
      */
@@ -109,6 +110,20 @@ class UserRepository extends ServiceEntityRepository
     {
         $entityManager = $this->getEntityManager();
         $entityManager->persist($user);
+        $entityManager->flush();
+    }
+
+    /**
+     * Delete user
+     *
+     * @param User $user
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function delete(User $user): void
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->remove($user);
         $entityManager->flush();
     }
 

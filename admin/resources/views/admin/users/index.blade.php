@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <div class="form-group search-button">
+                        <div class="form-group line-button-left">
                             <label class="col-form-label">&nbsp;</label><br />
                             <button type="submit" class="btn btn-primary">Search</button>
                         </div>

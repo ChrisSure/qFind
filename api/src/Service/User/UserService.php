@@ -99,6 +99,18 @@ class UserService
     }
 
     /**
+     * Delete user
+     *
+     * @param $id
+     * @return void
+     */
+    public function delete($id): void
+    {
+        $user = $this->userRepository->get($id);
+        $this->userRepository->delete($user);
+    }
+
+    /**
      * Activate user
      *
      * @param $id
