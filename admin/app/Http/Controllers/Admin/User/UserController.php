@@ -90,4 +90,29 @@ class UserController extends Controller
             return redirect()->route('admin.users.index')->with('success', $response['message']);
         }
     }
+
+    public function activate($id): RedirectResponse
+    {
+        $response = Http::withToken($this->getToken())->get(
+            $this->apiHost . '/users/' . $id . '/activate'
+        );
+        if ($response->clientError()) {
+            abort($response->status(), $response->object()->message);
+        } else {
+            return redirect()->route('admin.users.show', $id)->with('success', $response['message']);
+        }
+    }
+
+    public function block($id): RedirectResponse
+    {
+        $response = Http::withToken($this->getToken())->get(
+            $this->apiHost . '/users/' . $id . '/block'
+        );
+        if ($response->clientError()) {
+            abort($response->status(), $response->object()->message);
+        } else {
+            return redirect()->route('admin.users.show', $id)->with('success', $response['message']);
+        }
+    }
+
 }

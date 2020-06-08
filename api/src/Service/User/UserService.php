@@ -97,4 +97,30 @@ class UserService
         $user->setStatus($data['status'])->onPrePersist()->onPreUpdate();
         $this->userRepository->save($user);
     }
+
+    /**
+     * Activate user
+     *
+     * @param $id
+     * @return void
+     */
+    public function activate($id): void
+    {
+        $user = $this->userRepository->get($id);
+        $user->setStatus(User::$STATUS_ACTIVE);
+        $this->userRepository->save($user);
+    }
+
+    /**
+     * Block user
+     *
+     * @param $id
+     * @return void
+     */
+    public function block($id): void
+    {
+        $user = $this->userRepository->get($id);
+        $user->setStatus(User::$STATUS_BLOCKED);
+        $this->userRepository->save($user);
+    }
 }

@@ -29,5 +29,8 @@ Route::group(
 
         Route::resource('/users', 'User\UserController');
 
+        Route::get('/users/{id}/activate', 'User\UserController@activate')->name('users.activate');
+        Route::get('/users/{id}/block', 'User\UserController@block')->name('users.block');
+
     });
 

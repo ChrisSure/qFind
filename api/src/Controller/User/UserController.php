@@ -100,4 +100,38 @@ class UserController extends AbstractController
             return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }
     }
+
+    /**
+     * @Route("/{id}/activate",  methods={"GET"})
+     * Activate user
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function activate($id): JsonResponse
+    {
+        try {
+            $user = $this->userService->activate($id);
+            return new JsonResponse(['message' => "You successfull activate user"], JsonResponse::HTTP_OK);
+        } catch(NotFoundHttpException $e) {
+            return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
+        }
+    }
+
+    /**
+     * @Route("/{id}/block",  methods={"GET"})
+     * Block user
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function block($id): JsonResponse
+    {
+        try {
+            $user = $this->userService->block($id);
+            return new JsonResponse(['message' => "You successfull block user"], JsonResponse::HTTP_OK);
+        } catch(NotFoundHttpException $e) {
+            return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
+        }
+    }
 }
