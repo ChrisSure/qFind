@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\CreateRequest;
+use App\Http\Requests\Admin\User\UpdateRequest;
 use App\Service\Pagination\PaginationService;
+use App\Service\User\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -40,8 +42,8 @@ class UserController extends Controller
             return view('admin.users.index',
                 [
                     'users' => json_decode($response->json()['users']),
-                    'statusList' => $response->json()['statusList'],
-                    'rolesList' => $response->json()['rolesList'],
+                    'statusList' => UserService::statusList(),
+                    'rolesList' => UserService::rolesList(),
                     'paginationArray' => $paginationArray
                 ]
             );
@@ -63,16 +65,10 @@ class UserController extends Controller
 
     public function create(): View
     {
-        $response = Http::withToken($this->getToken())->get(
-            $this->apiHost . '/users'
-        );
-        if ($response->clientError()) {
-            abort($response->status(), $response->object()->message);
-        } else {
-
-            return view('admin.users.create', ['rolesList' => $response->json()['rolesList'], 'statusList' => $response->json()['statusList']]);
-        }
-
+        return view('admin.users.create', [
+            'statusList' => UserService::statusList(),
+            'rolesList' => UserService::rolesList(),
+        ]);
     }
 
     public function store(CreateRequest $request): RedirectResponse
@@ -88,6 +84,39 @@ class UserController extends Controller
             return redirect()->route('admin.users.create')->with('error', $response->object()->error);
         } else {
             return redirect()->route('admin.users.index')->with('success', $response['message']);
+        }
+    }
+
+    public function edit($id)
+    {
+        $response = Http::withToken($this->getToken())->get(
+            $this->apiHost . '/users/' . $id
+        );
+
+        if ($response->clientError()) {
+            abort($response->status(), $response->object()->error);
+        } else {
+            return view('admin.users.edit', [
+                'user' => json_decode($response['user']),
+                'statusList' => UserService::statusList(),
+                'rolesList' => UserService::rolesList(),
+            ]);
+        }
+    }
+
+    public function update(UpdateRequest $request, $id)
+    {
+        $response = Http::withToken($this->getToken())->asForm()->put($this->apiHost . '/users/' . $id, [
+            'email' => $request['email'],
+            'password' => ($request['password']) ? $request['password'] : '',
+            'role' => $request['role'],
+            'status' => $request['status']
+        ]);
+
+        if (!$response->successful()) {
+            return redirect()->route('admin.users.edit', $id)->with('error', $response->object()->error);
+        } else {
+            return redirect()->route('admin.users.show', $id)->with('success', $response['message']);
         }
     }
 

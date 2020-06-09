@@ -2,9 +2,10 @@
 
 namespace App\Controller\User;
 
-use App\Entity\User\User;
 use App\Service\User\UserService;
 use App\Validation\Auth\CreateUserValidation;
+use App\Validation\Auth\UpdateUserValidation;
+use Doctrine\DBAL\DBALException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,8 +53,6 @@ class UserController extends AbstractController
             return new JsonResponse(
                 [
                     'users' => $users,
-                    'statusList' => User::statusList(),
-                    'rolesList' => User::rolesList(),
                     'totalUsers' => $totalUsers
                 ],  JsonResponse::HTTP_OK);
         } catch (\Exception $e) {
@@ -98,6 +97,33 @@ class UserController extends AbstractController
             return new JsonResponse(['message' => "Created successfull"], JsonResponse::HTTP_CREATED);
         } catch(\InvalidArgumentException $e) {
             return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @Route("/{id}",  methods={"PUT"})
+     * Update users
+     *
+     * @return JsonResponse
+     */
+    public function update(Request $request, $id): JsonResponse
+    {
+        $data = $request->request->all();
+
+        $violations = (new UpdateUserValidation())->validate($data);
+        if ($violations->count() > 0) {
+            return new JsonResponse(["error" => (string)$violations], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        try {
+            $user = $this->userService->update($data, $id);
+            return new JsonResponse(['message' => "Updated successfull"], JsonResponse::HTTP_OK);
+        } catch(NotFoundHttpException $e) {
+                return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
+        } catch(\InvalidArgumentException $e) {
+            return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+        } catch (DBALException $e) {
+            return new JsonResponse(["error" => "User who has this email already exists."], JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 
