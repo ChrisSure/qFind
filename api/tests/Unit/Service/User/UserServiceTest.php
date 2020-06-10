@@ -66,4 +66,6 @@ class UserServiceTest extends Base
 
         $this->assertTrue(is_string($result));
     }
+
+
 }
