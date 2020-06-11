@@ -3,19 +3,11 @@
 namespace App\Tests\Unit\Entity\User;
 
 use App\Entity\User\User;
+use App\Tests\Unit\Base;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\TestCase;
-use Faker\Factory;
 
-class UserEntityTest extends TestCase
+class UserEntityTest extends Base
 {
-    private $faker;
-
-    protected function setUp(): void
-    {
-        $this->faker = Factory::create();
-    }
-
     /**
      * @test
      */
@@ -23,12 +15,12 @@ class UserEntityTest extends TestCase
     {
         $user = new User();
         $user->setEmail($email = $this->faker->email);
-        $user->setRoles($role = ["ROLE_USER"]);
+        $user->setRoles($role = User::$ROLE_USER);
         $user->setPasswordHash($password = $this->faker->password);
         $user->setStatus($status = $user::$STATUS_ACTIVE);
 
         $this->assertEquals($email, $user->getEmail());
-        $this->assertEquals($role, $user->getRoles());
+        $this->assertEquals([$role], $user->getRoles());
         $this->assertEquals($password, $user->getPassword());
         $this->assertEquals($status, $user->getStatus());
 

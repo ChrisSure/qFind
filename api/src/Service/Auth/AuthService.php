@@ -72,6 +72,9 @@ class AuthService
         if ($user->getStatus() != User::$STATUS_ACTIVE)
             throw new AccessDeniedHttpException('You didn\'t accept your email.');
 
+        if ($data['type'] === 'admin' && ($user->getRoles()[0] !== $user::$ROLE_ADMIN && $user->getRoles()[0] !== $user::$ROLE_SUPER_ADMIN))
+            throw new AccessDeniedHttpException('You don\'t have permission.');
+
         return $user;
     }
 }

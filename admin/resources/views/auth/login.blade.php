@@ -31,10 +31,6 @@
                     </span>
                 @endif
             </div>
-            <div class="form-group form-check">
-                <input type="checkbox" name="remember" class="form-check-input" id="loginRemember">
-                <label class="form-check-label" for="loginRemember">Remember me</label>
-            </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </section>

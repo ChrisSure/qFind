@@ -3,7 +3,6 @@
 namespace App\Service\Auth;
 
 use App\Facades\Auth\User;
-use Illuminate\Support\Facades\Cookie;
 
 class AuthService
 {
@@ -19,10 +18,15 @@ class AuthService
         $this->siteName = env('APP_NAME', null);
     }
 
-    public function setToken(string $token, $remember): void
+    public function setToken(string $token): void
     {
         $tokenData = $this->tokenService->encode($token);
-        User::setUserData($token, $tokenData, $remember);
+        User::setUserData($token, $tokenData);
+    }
+
+    public function isAuth()
+    {
+        return User::isAuth();
     }
 
     public function logout()

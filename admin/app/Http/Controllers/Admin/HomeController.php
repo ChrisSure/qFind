@@ -3,16 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Facades\Auth\User;
+use Illuminate\View\View;
 
 class HomeController  extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        echo User::getId();
-        echo User::getEmail();
-        echo User::getRole();
-        echo User::getIat();
-        echo User::getExp();
+        return view('admin.home');
     }
 }

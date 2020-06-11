@@ -2,16 +2,16 @@
 
 namespace App\Http\Middleware;
 
+use App\Facades\Auth\User;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
-use Illuminate\Support\Facades\Cookie;
 
 class Authenticate extends Middleware
 {
 
     public function handle($request, Closure $next)
     {
-        $flag = $this->getState();
+        $flag = User::isAuth();
 
         if (!$flag) {
             return redirect('/');
@@ -20,11 +20,4 @@ class Authenticate extends Middleware
         return $next($request);
     }
 
-    private function getState(): ?string
-    {
-        $siteName = env('APP_NAME', null);
-        return (session($siteName . '_jwt_token') !== null)
-            ? session($siteName . '_jwt_token')
-            : Cookie::get($siteName . '_jwt_token');
-    }
 }

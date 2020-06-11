@@ -32,6 +32,10 @@ class UserAuthValidation
                         new Assert\NotBlank(),
                         new Assert\Length(['min' => 2])
                     ],
+                'type' =>
+                    [
+                        new Assert\NotBlank()
+                    ]
 
             ]
         );

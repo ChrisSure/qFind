@@ -4,7 +4,9 @@ namespace App\Entity\User;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\User\UserRepository")
@@ -31,23 +33,28 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Email
      */
     private $email;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank
      */
-    private $roles = [];
+    private $roles;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank
      */
     private $password_hash;
 
     /**
      * @var string The status user
      * @ORM\Column(type="string")
+     * @Assert\NotBlank
      */
     private $status = "new";
 
@@ -71,6 +78,24 @@ class User implements UserInterface
     public static $STATUS_ACTIVE = "active";
     public static $STATUS_BLOCKED = "blocked";
 
+    public static function statusList(): array
+    {
+        return [
+            self::$STATUS_NEW => 'new',
+            self::$STATUS_ACTIVE => 'active',
+            self::$STATUS_BLOCKED => 'blocked',
+        ];
+    }
+
+    public static function rolesList(): array
+    {
+        return [
+            self::$ROLE_USER => 'ROLE_USER',
+            self::$ROLE_ADMIN => 'ROLE_ADMIN',
+            self::$ROLE_SUPER_ADMIN => 'ROLE_SUPER_ADMIN',
+        ];
+    }
+
 
     public function getId(): ?int
     {
@@ -78,9 +103,9 @@ class User implements UserInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getSocial(): ArrayCollection
+    public function getSocial(): Collection
     {
         return $this->social;
     }
@@ -97,9 +122,9 @@ class User implements UserInterface
         return $this;
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles(string $role): self
     {
-        $this->roles = $roles;
+        $this->roles = $role;
 
         return $this;
     }
@@ -153,11 +178,7 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        //$roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return [$this->roles];
     }
 
     public function getPassword()

@@ -4,19 +4,11 @@ namespace App\Tests\Unit\Service\Auth;
 
 use App\Entity\User\User;
 use App\Service\Auth\JWTService;
+use App\Tests\Unit\Base;
 use Mockery;
-use PHPUnit\Framework\TestCase;
-use Faker\Factory;
 
-class JWTServiceTest extends TestCase
+class JWTServiceTest extends Base
 {
-    private $faker;
-
-    protected function setUp(): void
-    {
-        $this->faker = Factory::create();
-    }
-
     /**
      * @test
      */
