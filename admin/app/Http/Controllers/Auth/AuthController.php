@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Service\Auth\AuthService;
 use Illuminate\Support\Facades\Http;
-use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
@@ -19,30 +18,35 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function showLoginForm(): View
+    public function showLoginForm()
     {
+        if ($this->authService->isAuth()) {
+            return redirect()->route('admin.home');
+        }
         return view('auth.login');
     }
 
     public function login(LoginRequest $request): RedirectResponse
     {
-        $data = $request->only(['email', 'password', 'remember']);
+        $data = $request->only(['email', 'password']);
 
         $response = Http::asForm()->post($this->apiHost . '/auth/signin', [
             'email' => $data['email'],
-            'password' => $data['password']
+            'password' => $data['password'],
+            'type' => 'admin'
         ]);
 
         if (!empty($response['error'])) {
             return redirect()->route('login')->with('error', $response['error']);
         } else {
-            $this->authService->setToken($response['token'], isset($data['remember']) ?? $data['remember']);
+            $this->authService->setToken($response['token']);
             return redirect()->route('admin.home');
         }
     }
 
-    public function logout()
+    public function logout(): RedirectResponse
     {
         $this->authService->logout();
+        return redirect()->route('login');
     }
 }

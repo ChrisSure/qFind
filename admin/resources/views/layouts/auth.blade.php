@@ -22,6 +22,8 @@
             </div>
         </div>
     </header>
+
+    <section>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-4 offset-sm-4">
@@ -29,6 +31,7 @@
             </div>
         </div>
     </div>
+    </section>
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}"></script>

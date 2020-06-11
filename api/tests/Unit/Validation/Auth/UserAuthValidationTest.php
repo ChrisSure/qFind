@@ -2,26 +2,18 @@
 
 namespace App\Tests\Unit\Validation\Auth;
 
+use App\Tests\Unit\Base;
 use App\Validation\Auth\UserAuthValidation;
-use PHPUnit\Framework\TestCase;
-use Faker\Factory;
 
-class UserAuthValidationTest extends TestCase
+class UserAuthValidationTest extends Base
 {
-    private $faker;
-
-    protected function setUp(): void
-    {
-        $this->faker = Factory::create();
-    }
-
     /**
      * @test
      */
     public function successValidate(): void
     {
         $validate = new UserAuthValidation();
-        $data = ['email' => $this->faker->email, 'password' => $this->faker->password];
+        $data = ['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'site'];
         $result = $validate->validate($data);
 
         $this->assertEquals(0, $result->count());
@@ -33,7 +25,7 @@ class UserAuthValidationTest extends TestCase
     public function failureValidate(): void
     {
         $validate = new UserAuthValidation();
-        $data = ['email' => $this->faker->title, 'password' => $this->faker->password];
+        $data = ['email' => $this->faker->title, 'password' => $this->faker->password, 'type' => 'site'];
         $result = $validate->validate($data);
 
         $this->assertEquals(1, $result->count());

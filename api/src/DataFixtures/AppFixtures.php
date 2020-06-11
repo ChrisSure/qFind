@@ -43,7 +43,7 @@ class AppFixtures extends Fixture
         // Set User
         $user = new User();
         $user->setEmail("user@gmail.com");
-        $user->setRoles([$user::$ROLE_USER]);
+        $user->setRoles($user::$ROLE_USER);
         $user->setPasswordHash($this->passwordHashService->hashPassword($user, '123'));
         $user->setStatus($user::$STATUS_ACTIVE);
         $user->onPrePersist();
@@ -63,7 +63,7 @@ class AppFixtures extends Fixture
         // Set Admin
         $admin = new User();
         $admin->setEmail("admin@gmail.com");
-        $admin->setRoles([$user::$ROLE_ADMIN]);
+        $admin->setRoles($user::$ROLE_ADMIN);
         $admin->setPasswordHash($this->passwordHashService->hashPassword($user, '123'));
         $admin->setStatus($user::$STATUS_ACTIVE);
         $admin->onPrePersist();
@@ -75,7 +75,7 @@ class AppFixtures extends Fixture
         // Set Super admin
         $superAdmin = new User();
         $superAdmin->setEmail("super_admin@gmail.com");
-        $superAdmin->setRoles([$user::$ROLE_SUPER_ADMIN]);
+        $superAdmin->setRoles($user::$ROLE_SUPER_ADMIN);
         $superAdmin->setPasswordHash($this->passwordHashService->hashPassword($user, '123'));
         $superAdmin->setStatus($user::$STATUS_ACTIVE);
         $superAdmin->onPrePersist();

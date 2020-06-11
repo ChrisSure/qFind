@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'Auth\AuthController@showLoginForm')->name('login');
 Route::post('/', 'Auth\AuthController@login');
 
-Route::get('/logout', 'Auth\AuthController@logout')->name('logout');
-
 Route::group(
     [
         'prefix' => 'admin',
@@ -26,6 +24,13 @@ Route::group(
         'middleware' => ['auth'],
     ],
     function () {
+        Route::get('/logout', '\App\Http\Controllers\Auth\AuthController@logout')->name('logout');
         Route::get('/', 'HomeController@index')->name('home');
+
+        Route::resource('/users', 'User\UserController');
+
+        Route::get('/users/{id}/activate', 'User\UserController@activate')->name('users.activate');
+        Route::get('/users/{id}/block', 'User\UserController@block')->name('users.block');
+
     });
 
