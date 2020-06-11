@@ -68,11 +68,9 @@ class UpdateUserControllerTest extends Base
 
     private function revertChanges()
     {
-        $doctrine = self::$container->get('doctrine');
-        $manager = $doctrine->getManager();
-        $user = $doctrine->getRepository(User::class)->findOneBy(['email' => 'admin_test@gmail.com']);
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => 'admin_test@gmail.com']);
         $user->setEmail('admin@gmail.com');
-        $manager->persist($user);
-        $manager->flush();
+        $this->manager->persist($user);
+        $this->manager->flush();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Entity\User;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
 
@@ -32,23 +33,28 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Email
      */
     private $email;
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank
      */
     private $roles;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank
      */
     private $password_hash;
 
     /**
      * @var string The status user
      * @ORM\Column(type="string")
+     * @Assert\NotBlank
      */
     private $status = "new";
 

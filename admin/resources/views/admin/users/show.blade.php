@@ -9,7 +9,7 @@
             </button>
         </div>
     @endif
-    <h1>User</h1>
+
     @if(!(empty($user)))
         <table class="table table-bordered table-striped">
             <tbody>

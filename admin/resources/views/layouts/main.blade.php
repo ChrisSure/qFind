@@ -36,6 +36,8 @@
                 </div>
             </div>
             <div class="col-sm-10">
+                @section('breadcrumbs', Breadcrumbs::render())
+                @yield('breadcrumbs')
                 @yield('content')
             </div>
         </div>

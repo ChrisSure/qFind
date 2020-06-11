@@ -1,7 +1,6 @@
 @extends('layouts.main')
 
 @section('content')
-    <h1>Create</h1>
 
     @if (session('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">

@@ -11,9 +11,15 @@ class Base extends WebTestCase
 {
     protected $client;
 
+    protected $doctrine;
+
+    protected $manager;
+
     protected function setUp(): void
     {
         $this->client = static::createClient();
+        $this->doctrine = self::$container->get('doctrine');
+        $this->manager = $this->doctrine->getManager();
     }
 
     /**
