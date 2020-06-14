@@ -1,6 +1,7 @@
 docker-compose run --rm php-fpm                     ---- run docker container
 
-docker-compose run --rm php-fpm sh                  ---- enter inside container
+docker-compose run --rm php-fpm sh                  ---- enter inside container php
+docker-compose run --rm client sh                   ---- enter inside container client
 
 php bin/console make:migration                      ---- create migrations with entity shcema
 php bin/console doctrine:migrations:migrate         ---- import migrate to db
