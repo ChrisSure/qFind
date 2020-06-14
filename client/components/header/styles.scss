@@ -1,0 +1,33 @@
+@import "../../styles/colors";
+
+header {
+  background: rgb(77, 10, 84);
+  height: 6vh;
+  width: 100%;
+  opacity: 0.8;
+  z-index: 2;
+
+  h1 {
+    margin-left: 30px;
+    margin-top: 10px;
+    color: white;
+    float: left;
+  }
+
+  a {
+    color: white;
+    text-decoration: none;
+  }
+  .sign_in_icon {
+    position: absolute;
+    right: 30px;
+    top: 7px;
+    border-color: $white;
+    text-transform: none;
+    color: $white;
+
+    &:hover {
+      border-color: $white-hover;
+    }
+  }
+}
