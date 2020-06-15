@@ -12,6 +12,7 @@ php artisan test                               ---- run php unit tests Laravel
 php bin/console doctrine:fixtures:load --env=test   ---- test enviroment
 
 docker inspect <container_id>                       ---- detail information about container
+docker logs --details <container_id>                ---- Logs docker container
 docker ps -a                                        ---- list of containers docker
 sudo systemctl stop docker                               ---- Docker stop
 sudo systemctl start docker                              ---- Docker start

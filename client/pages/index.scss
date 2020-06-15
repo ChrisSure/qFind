@@ -20,3 +20,12 @@ body {
 main {
   height: 100vh;
 }
+
+li {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+  color: $white
+}
