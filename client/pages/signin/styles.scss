@@ -1,18 +1,26 @@
+@import "../../styles/colors";
+
 aside {
   margin-top: 0px;
-  text-align: center;
   h1 {
     font-size: 30px;
+    text-align: center;
   }
   ul {
     margin: 0 auto;
+    text-align: center;
     & li {
       margin-bottom: 15px;
+      list-style-type: none;
+    }
+    & a {
+      color: $white;
+      text-decoration: none;
     }
   }
   .root {
     & ul > li > * {
-      width: 30%;
+      width: 60%;
     }
     & ul > li > button {
       height: 50px;
