@@ -7,7 +7,7 @@ export default class Base {
     }
 
     isRequire(field, value) {
-        if (value === "") {
+        if (value === "" || !value) {
             this.errors.push(`Field ${field} can not be empty.`);
         }
     }

@@ -5,4 +5,4 @@ export const getPosts = () =>async dispatch=>{
         type: types.GET_POSTS,
         payload: ['1post', '2post'],
     });
-}
+};

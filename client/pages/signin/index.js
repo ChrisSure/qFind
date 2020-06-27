@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import styles from './styles.scss';
@@ -8,24 +8,23 @@ import Link from "next/link";
 import Grid from '@material-ui/core/Grid';
 import {useDispatch, useSelector} from "react-redux";
 import * as types from "../../redux/types";
-import {signin} from "../../redux/actions/authAction";
-import authValidation from "../../validation/auth/authValidation";
+import {authValidation, signin} from "../../redux/actions/authAction";
+import Alert from '@material-ui/lab/Alert';
 
+
+/*function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}*/
 
 const SignIn = (props) => {
     const dispatch = useDispatch();
-    const authStore = useSelector(state => state.auth);
-    let errorsValidation = [];
+    const {email, password, errors} = useSelector(state => state.auth);
+    const auth = useSelector(state => state.auth);
 
     const handleOnSubmit = (event) => {
         event.preventDefault();
 
-        let errors = authValidation(authStore);
-        if (errors.length > 0) {
-            errorsValidation = errors;
-        } else {
-            dispatch(signin(authStore));
-        }
+        dispatch(authValidation(email, password));
     };
 
     const handleOnChangeEmail = (event) => {
@@ -36,18 +35,13 @@ const SignIn = (props) => {
         dispatch({type: types.CHANGE_PASSWORD, value: event.target.value});
     };
 
-    const getErrors = (errorsValidation) => {
-        console.log(errorsValidation);
-        if (errorsValidation.length > 0) {
-            return (<p>Ok</p>);
-        }
-    };
-
     return (
         <main>
             <Header/>
             <aside>
-                {getErrors(errorsValidation)}
+                {errors && errors.map(item => (
+                    <Alert key={item} severity="error">{item}</Alert>
+                ))}
                 <Grid container>
                     <Grid item xs={6}>
                         <h1>SignIn</h1>
@@ -59,7 +53,7 @@ const SignIn = (props) => {
                                         label="Email"
                                         variant="outlined"
                                         name="email"
-                                        value={props.email}
+                                        value={email}
                                         onChange={handleOnChangeEmail}
                                     />
                                 </li>
@@ -70,7 +64,7 @@ const SignIn = (props) => {
                                         variant="outlined"
                                         type="password"
                                         name="password"
-                                        value={props.email}
+                                        value={password}
                                         onChange={handleOnChangePassword}
                                     />
                                 </li>
