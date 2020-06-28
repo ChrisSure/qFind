@@ -7,19 +7,14 @@ import Button from '@material-ui/core/Button';
 import Link from "next/link";
 import Grid from '@material-ui/core/Grid';
 import {useDispatch, useSelector} from "react-redux";
-import * as types from "../../redux/types";
-import {authValidation, signin} from "../../redux/actions/authAction";
+import * as types from "../../redux/types/authTypes";
+import {authValidation} from "../../redux/actions/authAction";
 import Alert from '@material-ui/lab/Alert';
 
-
-/*function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-}*/
 
 const SignIn = (props) => {
     const dispatch = useDispatch();
     const {email, password, errors} = useSelector(state => state.auth);
-    const auth = useSelector(state => state.auth);
 
     const handleOnSubmit = (event) => {
         event.preventDefault();
@@ -28,11 +23,11 @@ const SignIn = (props) => {
     };
 
     const handleOnChangeEmail = (event) => {
-        dispatch({type: types.CHANGE_EMAIL, value: event.target.value});
+        dispatch({type: types.AUTH_CHANGE_EMAIL, email: event.target.value});
     };
 
     const handleOnChangePassword = (event) => {
-        dispatch({type: types.CHANGE_PASSWORD, value: event.target.value});
+        dispatch({type: types.AUTH_CHANGE_PASSWORD, password: event.target.value});
     };
 
     return (

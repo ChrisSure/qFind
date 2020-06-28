@@ -1,5 +1,6 @@
-import * as types from "../types";
-import Base from "../helpers/Base";
+import * as typesAuth from "../types/authTypes";
+import * as typesToken from "../types/tokenTypes";
+import Base from "../helpers/Validation";
 import axios from 'axios';
 
 
@@ -18,16 +19,16 @@ export const authValidation = (email, password) =>async dispatch=>{
     validation.minString(fieldPassword, password, 2);
 
     if (validation.errors.length === 0) {
-        signin(email, password);
+        dispatch(signin(email, password));
         dispatch(resetForm());
     }
     dispatch({
-        type: types.AUTH_VALIDATION,
+        type: typesAuth.AUTH_VALIDATION,
         errors: validation.errors,
     });
 };
 
-function signin(email, password) {
+const signin = (email, password) =>async dispatch=> {
     const params = new URLSearchParams();
     params.append('email', email);
     params.append('password', password);
@@ -39,20 +40,25 @@ function signin(email, password) {
         data: params
     })
         .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
+            dispatch({
+                type: typesToken.TOKEN_SET_TOKEN,
+                token: response.data.token,
+            });
+        }, (error) => {
+            dispatch({
+                type: typesAuth.AUTH_VALIDATION,
+                errors: [error.response.data.error],
+            });
         });
 }
 
 const resetForm = () =>async dispatch=> {
     dispatch({
-        type: types.CHANGE_EMAIL,
-        value: '',
+        type: typesAuth.AUTH_CHANGE_EMAIL,
+        email: '',
     });
     dispatch({
-        type: types.CHANGE_PASSWORD,
-        value: '',
+        type: typesAuth.AUTH_CHANGE_PASSWORD,
+        password: '',
     });
 }

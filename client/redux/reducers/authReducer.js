@@ -1,4 +1,4 @@
-import * as types from "../types";
+import * as types from "../types/authTypes";
 
 const initialState = {
     email: '',
@@ -8,21 +8,22 @@ const initialState = {
 
 export const authReducer = (state = initialState, action) => {
     switch (action.type) {
-        case types.CHANGE_EMAIL:
+        case types.AUTH_CHANGE_EMAIL:
             return {
                 ...state,
-                email:action.value,
+                email:action.email,
             }
-        case types.CHANGE_PASSWORD:
+        case types.AUTH_CHANGE_PASSWORD:
             return {
                 ...state,
-                password: action.value
+                password: action.password
             }
         case types.AUTH_VALIDATION:
             return {
                 ...state,
                 errors: action.errors,
             }
+            
         default:
             return state;
     }
