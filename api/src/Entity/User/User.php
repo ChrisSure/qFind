@@ -59,6 +59,11 @@ class User implements UserInterface
     private $status = "new";
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $token;
+
+    /**
      * @var \DateTime $created_at
      * @ORM\Column(type="datetime")
      */
@@ -149,6 +154,18 @@ class User implements UserInterface
     public function setStatus(string $status): self
     {
         $this->status = $status;
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
+
         return $this;
     }
 

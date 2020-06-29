@@ -4,6 +4,7 @@ namespace App\Controller\Auth;
 
 use App\Service\Auth\AuthService;
 use App\Service\Auth\JWTService;
+use App\Service\User\UserService;
 use App\Validation\Auth\UserAuthValidation;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -62,6 +63,30 @@ class AuthController extends AbstractController
             return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
         } catch (AccessDeniedHttpException $e) {
             return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @Route("/signup",  methods={"POST"})
+     * Sign up user
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function signUp(Request $request): JsonResponse
+    {
+        $data = $request->request->all();
+
+        $violations = (new UserAuthValidation())->validate($data);
+        if ($violations->count() > 0) {
+            return new JsonResponse(["error" => (string)$violations], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        try {
+            $this->authService->createUser($data);
+            return new JsonResponse(['message' => "For confirm registration check your email"], JsonResponse::HTTP_CREATED);
+        } catch (\InvalidArgumentException $e) {
+            return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
         }
     }
 }
