@@ -18,11 +18,13 @@ class UserEntityTest extends Base
         $user->setRoles($role = User::$ROLE_USER);
         $user->setPasswordHash($password = $this->faker->password);
         $user->setStatus($status = $user::$STATUS_ACTIVE);
+        $user->setToken($token = $this->faker->sentence);
 
         $this->assertEquals($email, $user->getEmail());
         $this->assertEquals([$role], $user->getRoles());
         $this->assertEquals($password, $user->getPassword());
         $this->assertEquals($status, $user->getStatus());
+        $this->assertEquals($token, $user->getToken());
 
         $this->assertTrue($user->getSocial() instanceof ArrayCollection);
     }

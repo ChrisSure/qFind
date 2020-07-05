@@ -87,7 +87,7 @@ class AuthService
      *
      * @param array $data
      */
-    public function createUser(array $data): void
+    public function createUser(array $data): User
     {
         $user = $this->userRepository->findOneBy(['email' => $data['email']]);
         if ($user !== null) {
@@ -104,6 +104,8 @@ class AuthService
         $this->userRepository->save($user);
 
         $this->authMailService->sendCheckRegistration($user, $token->getToken());
+
+        return $user;
     }
 
     /**

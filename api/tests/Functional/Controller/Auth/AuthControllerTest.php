@@ -43,4 +43,23 @@ class AuthControllerTest extends Base
         $this->assertTrue($this->client->getResponse()->isSuccessful());
         $this->assertTrue(is_string($response->token));
     }
+
+    /**
+     * @test
+     */
+    /*public function signUpAdmin(): void
+    {
+        $postData = ['email' => 'admin@gmail.com', 'password' => '123', 'type' => 'admin'];
+
+        $this->client->request(
+            'POST',
+            '/auth/signin',
+            $postData
+        );
+
+        $response = json_decode($this->client->getResponse()->getContent());
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertTrue(is_string($response->token));
+    }*/
 }
