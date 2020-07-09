@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-import styles from './styles.scss';
+import styles from '../index.scss';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Link from "next/link";
@@ -9,6 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import {useDispatch, useSelector} from "react-redux";
 import * as types from "../../redux/types/authTypes";
 import {authValidation} from "../../redux/actions/authAction";
+import {signin} from "../../redux/actions/authAction";
+import {resetForm} from "../../redux/actions/authAction";
 import Alert from '@material-ui/lab/Alert';
 
 
@@ -19,7 +21,13 @@ const SignIn = (props) => {
     const handleOnSubmit = (event) => {
         event.preventDefault();
 
-        dispatch(authValidation(email, password));
+        let validationErrors = dispatch(authValidation(email, password));
+        validationErrors.then((count) => {
+            if (count === 0) {
+                dispatch(signin(email, password));
+                dispatch(resetForm());
+            }
+        });
     };
 
     const handleOnChangeEmail = (event) => {

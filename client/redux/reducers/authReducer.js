@@ -4,6 +4,7 @@ const initialState = {
     email: '',
     password: '',
     errors: [],
+    message: '',
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -23,7 +24,11 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 errors: action.errors,
             }
-            
+        case types.AUTH_SIGNUP_SUCCESS:
+            return {
+                ...state,
+                message: action.message
+            }
         default:
             return state;
     }

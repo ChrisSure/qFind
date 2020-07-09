@@ -18,17 +18,15 @@ export const authValidation = (email, password) =>async dispatch=>{
     validation.isString(fieldPassword, password);
     validation.minString(fieldPassword, password, 2);
 
-    if (validation.errors.length === 0) {
-        dispatch(signin(email, password));
-        dispatch(resetForm());
-    }
     dispatch({
         type: typesAuth.AUTH_VALIDATION,
         errors: validation.errors,
     });
+
+    return validation.errors.length;
 };
 
-const signin = (email, password) =>async dispatch=> {
+export const signin = (email, password) =>async dispatch=> {
     const params = new URLSearchParams();
     params.append('email', email);
     params.append('password', password);
@@ -38,21 +36,43 @@ const signin = (email, password) =>async dispatch=> {
         method: 'post',
         url: 'http://localhost:9999/auth/signin',
         data: params
-    })
-        .then(function (response) {
+    }).then(function (response) {
             dispatch({
                 type: typesToken.TOKEN_SET_TOKEN,
                 token: response.data.token,
             });
-        }, (error) => {
-            dispatch({
-                type: typesAuth.AUTH_VALIDATION,
-                errors: [error.response.data.error],
-            });
+    }).catch(function (error) {
+        dispatch({
+            type: typesAuth.AUTH_VALIDATION,
+            errors: [error.response.data.error],
         });
+    });
 }
 
-const resetForm = () =>async dispatch=> {
+export const signup = (email, password) =>async dispatch=> {
+    const params = new URLSearchParams();
+    params.append('email', email);
+    params.append('password', password);
+    params.append('type', 'site');
+
+    axios({
+        method: 'post',
+        url: 'http://localhost:9999/auth/signup',
+        data: params
+    }).then(function (response) {
+        dispatch({
+            type: typesAuth.AUTH_SIGNUP_SUCCESS,
+            message: response.data.message,
+        });
+    }).catch(function (error) {
+        dispatch({
+            type: typesAuth.AUTH_VALIDATION,
+            errors: [error.response.data.error],
+        });
+    });
+}
+
+export const resetForm = () =>async dispatch=> {
     dispatch({
         type: typesAuth.AUTH_CHANGE_EMAIL,
         email: '',
