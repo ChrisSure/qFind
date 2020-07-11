@@ -8,9 +8,8 @@ import Link from "next/link";
 import Grid from '@material-ui/core/Grid';
 import {useDispatch, useSelector} from "react-redux";
 import * as types from "../../redux/types/authTypes";
-import {authValidation} from "../../redux/actions/authAction";
+import {authValidation, resetForm} from "../../redux/actions/authAction";
 import {signin} from "../../redux/actions/authAction";
-import {resetForm} from "../../redux/actions/authAction";
 import Alert from '@material-ui/lab/Alert';
 
 
@@ -36,6 +35,10 @@ const SignIn = (props) => {
 
     const handleOnChangePassword = (event) => {
         dispatch({type: types.AUTH_CHANGE_PASSWORD, password: event.target.value});
+    };
+
+    const resetFormAll = () => {
+        dispatch(resetForm());
     };
 
     return (
@@ -84,7 +87,7 @@ const SignIn = (props) => {
                             <li>
                                 <Button variant="contained" color="secondary">
                                     <Link href="/signup">
-                                        <a> Create account</a>
+                                        <a onClick={resetFormAll}> Create account</a>
                                     </Link>
                                 </Button>
                             </li>

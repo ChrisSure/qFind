@@ -29,6 +29,14 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 message: action.message
             }
+        case types.AUTH_RESET_FORM:
+            return {
+                email: '',
+                password: '',
+                message: '',
+                errors: [],
+            }
+
         default:
             return state;
     }

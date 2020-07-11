@@ -74,11 +74,6 @@ export const signup = (email, password) =>async dispatch=> {
 
 export const resetForm = () =>async dispatch=> {
     dispatch({
-        type: typesAuth.AUTH_CHANGE_EMAIL,
-        email: '',
-    });
-    dispatch({
-        type: typesAuth.AUTH_CHANGE_PASSWORD,
-        password: '',
+        type: typesAuth.AUTH_RESET_FORM,
     });
 }
