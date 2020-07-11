@@ -86,7 +86,25 @@ class AuthController extends AbstractController
             $this->authService->createUser($data);
             return new JsonResponse(['message' => "For confirm registration check your email"], JsonResponse::HTTP_CREATED);
         } catch (\InvalidArgumentException $e) {
-            return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
+            return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * Confirm user email
+     * @Route("/confirm-register",  methods={"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function confirm(Request $request): JsonResponse
+    {
+        $data = $request->query->all();
+
+        try {
+            $token = $this->authService->confirmRegisterUser($data);
+            return new JsonResponse(['token' => $token], JsonResponse::HTTP_OK);
+        } catch (\InvalidArgumentException $e) {
+            return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 }

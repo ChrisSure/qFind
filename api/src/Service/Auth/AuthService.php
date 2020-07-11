@@ -3,10 +3,12 @@
 namespace App\Service\Auth;
 
 use App\Entity\User\User;
+use App\Entity\User\UserToken;
 use App\Repository\User\UserRepository;
 use App\Service\Email\AuthMailService;
 use App\Service\Helper\SerializeService;
 use App\Service\User\UserTokenService;
+use Facade\FlareClient\Http\Exceptions\NotFound;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -109,6 +111,35 @@ class AuthService
     }
 
     /**
+     * Confirm register user
+     *
+     * @param array $data
+     * @return string
+     */
+    public function confirmRegisterUser(array $data): string
+    {
+        $user = $this->userRepository->get($data['user_id']);
+        if ($user->getToken() === null) {
+            throw new NotFoundHttpException('Your user doesn\'t have token.');
+        }
+
+        $tokenObject = $this->serializeService->deserialize($user->getToken(), UserToken::class, 'json');
+        if ($tokenObject->getToken() != $data['token']) {
+            throw new \BadMethodCallException('You have missed data.');
+        }
+        if ($tokenObject->getExpired() <= time()) {
+            throw new \InvalidArgumentException('Token time has overed.');
+        }
+
+        $user->setStatus(User::$STATUS_ACTIVE);
+        $user->setToken(null);
+        $user->onPreUpdate();
+        $this->userRepository->save($user);
+
+        return $this->jwtService->create($user);
+    }
+
+    /**
      * Check user credentials
      *
      * @param array $data
@@ -131,4 +162,5 @@ class AuthService
 
         return $user;
     }
+
 }
