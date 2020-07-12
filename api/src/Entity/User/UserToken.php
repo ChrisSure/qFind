@@ -40,4 +40,18 @@ class UserToken
     {
         return $this->expired;
     }
+
+    /**
+     * Check if user token expired
+     *
+     * @param UserToken $userToken
+     * @return bool
+     */
+    public function isExpiredToken(): bool
+    {
+        if (time() >= $this->expired) {
+            return true;
+        }
+        return false;
+    }
 }

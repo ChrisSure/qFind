@@ -25,6 +25,7 @@ class AuthMailService
 
     /**
      * Send check registration
+     *
      * @param User $user
      * @param string $token
      * @return void
@@ -37,6 +38,28 @@ class AuthMailService
             ->setBody(
                 $this->twig->render(
                     'emails/auth/confirm.html.twig',
+                    ['id' => $user->getId(),'token' => $token]
+                ),
+                'text/html'
+            );
+        $this->mailer->send($message);
+    }
+
+    /**
+     * Send forget password
+     *
+     * @param User $user
+     * @param string $token
+     * @return void
+     */
+    public function sendForgetPassword(User $user, $token): void
+    {
+        $message = (new \Swift_Message('Hello Email'))
+            ->setFrom('admin@example.com')
+            ->setTo($user->getEmail())
+            ->setBody(
+                $this->twig->render(
+                    'emails/auth/forget.html.twig',
                     ['id' => $user->getId(),'token' => $token]
                 ),
                 'text/html'

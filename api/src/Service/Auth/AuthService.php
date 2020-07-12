@@ -88,6 +88,7 @@ class AuthService
      * Create user on site
      *
      * @param array $data
+     * @return User $user
      */
     public function createUser(array $data): User
     {
@@ -127,7 +128,7 @@ class AuthService
         if ($tokenObject->getToken() != $data['token']) {
             throw new \BadMethodCallException('You have missed data.');
         }
-        if ($tokenObject->getExpired() <= time()) {
+        if ($tokenObject->isExpiredToken()) {
             throw new \InvalidArgumentException('Token time has overed.');
         }
 
@@ -137,6 +138,30 @@ class AuthService
         $this->userRepository->save($user);
 
         return $this->jwtService->create($user);
+    }
+
+    /**
+     * Forget user password
+     *
+     * @param array $data
+     * @return User $user
+     */
+    public function forgetPassword(array $data): User
+    {
+        $user = $this->userRepository->getByEmail($data['email']);
+        $tokenObject = $this->serializeService->deserialize($user->getToken(), UserToken::class, 'json');
+        if (!$tokenObject->isExpiredToken()) {
+            throw new \BadMethodCallException('You change your password too often.');
+        }
+
+        $token = $this->userTokenService->generateToken();
+
+        $user->setToken($this->serializeService->serialize($token))->onPreUpdate();
+        $this->userRepository->save($user);
+
+        $this->authMailService->sendForgetPassword($user, $token->getToken());
+
+        return $user;
     }
 
     /**
