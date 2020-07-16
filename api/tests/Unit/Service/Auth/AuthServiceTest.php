@@ -250,6 +250,165 @@ class AuthServiceTest extends Base
     /**
      * @test
      */
+    public function confirmRegisterUser(): void
+    {
+        $token = $this->faker->sentence;
+        $userTokenObject = new UserToken($token, 4102437600);
+
+        $this->userRepositoryMock->shouldReceive('get')->andReturn($this->userMock);
+        $this->userRepositoryMock->shouldReceive('save')->andReturn(null);
+        $this->userMock->shouldReceive('getToken')->andReturn($this->faker->sentence);
+        $this->userMock->shouldReceive('setStatus')->andReturn($this->userMock);
+        $this->userMock->shouldReceive('setToken')->andReturn($this->userMock);
+        $this->userMock->shouldReceive('onPreUpdate')->andReturn($this->userMock);
+        $this->serializeService->shouldReceive('deserialize')->andReturn($userTokenObject);
+        $this->jwtService->shouldReceive('create')->andReturn($jwtToken = $this->faker->name);
+
+        $authService = new AuthService(
+            $this->userRepositoryMock,
+            $this->passwordHashServiceMock,
+            $this->jwtService,
+            $this->userTokenService,
+            $this->serializeService,
+            $this->authMailService
+        );
+
+        $result = $authService->confirmRegisterUser(['user_id' => $this->faker->randomDigit, 'token' => $token]);
+
+        $this->assertEquals($result, $jwtToken);
+    }
+    // Confirm User
+
+    // Forgot password
+    /**
+     * @test
+     */
+    public function expiredTokenForgotPassword(): void
+    {
+        $token = $this->faker->sentence;
+        $userTokenObject = new UserToken($token, 1102437600);
+
+        $this->userRepositoryMock->shouldReceive('getByEmail')->andReturn($this->userMock);
+        $this->userMock->shouldReceive('getToken')->andReturn($token);
+        $this->serializeService->shouldReceive('deserialize')->andReturn($userTokenObject);
+
+        $this->expectException(\BadMethodCallException::class);
+
+        $authService = new AuthService(
+            $this->userRepositoryMock,
+            $this->passwordHashServiceMock,
+            $this->jwtService,
+            $this->userTokenService,
+            $this->serializeService,
+            $this->authMailService
+        );
+
+        $result = $authService->forgetPassword(['email' => $this->faker->email]);
+    }
+
+    /**
+     * @test
+     */
+    public function forgotPassword(): void
+    {
+        $email = $this->faker->email;
+        $token = $this->faker->sentence;
+        $userTokenObject = new UserToken($token, 102437600);
+
+        $this->userRepositoryMock->shouldReceive('getByEmail')->andReturn($this->userMock);
+        $this->userRepositoryMock->shouldReceive('save')->andReturn(null);
+        $this->userMock->shouldReceive('getToken')->andReturn($token);
+        $this->userMock->shouldReceive('getEmail')->andReturn($email);
+        $this->userMock->shouldReceive('setToken')->andReturn($this->userMock);
+        $this->userMock->shouldReceive('onPreUpdate')->andReturn($this->userMock);
+        $this->serializeService->shouldReceive('deserialize')->andReturn($userTokenObject);
+        $this->userTokenService->shouldReceive('generateToken')->andReturn($this->userTokenMock);
+        $this->serializeService->shouldReceive('serialize')->andReturn($this->faker->name);
+        $this->userTokenMock->shouldReceive('getToken')->andReturn($this->faker->name);
+        $this->authMailService->shouldReceive('sendForgetPassword')->andReturn(null);
+
+        $authService = new AuthService(
+            $this->userRepositoryMock,
+            $this->passwordHashServiceMock,
+            $this->jwtService,
+            $this->userTokenService,
+            $this->serializeService,
+            $this->authMailService
+        );
+
+        $result = $authService->forgetPassword(['email' => $email]);
+
+        $this->assertTrue(is_object($result));
+        $this->assertEquals($result->getEmail(), $email);
+    }
+    // Forgot password
+
+    // Confirm new password
+    /**
+     * @test
+     */
+    public function confirmNewPassword(): void
+    {
+        $token = $this->faker->sentence;
+        $userTokenObject = new UserToken($token, 11112437600);
+
+        $this->userRepositoryMock->shouldReceive('get')->andReturn($this->userMock);
+        $this->userMock->shouldReceive('getToken')->andReturn($token);
+        $this->serializeService->shouldReceive('deserialize')->andReturn($userTokenObject);
+
+        $authService = new AuthService(
+            $this->userRepositoryMock,
+            $this->passwordHashServiceMock,
+            $this->jwtService,
+            $this->userTokenService,
+            $this->serializeService,
+            $this->authMailService
+        );
+
+        $result = $authService->confirmNewPassword(['user_id' => $this->faker->randomDigit, 'token' => $token]);
+
+        $this->assertTrue(is_object($result));
+        $this->assertEquals($result->getToken(), $token);
+    }
+    // Confirm new password
+
+    // Set new password
+    /**
+     * @test
+     */
+    public function newPassword(): void
+    {
+        $token = $this->faker->sentence;
+        $userTokenObject = new UserToken($token, 11112437600);
+
+        $this->userRepositoryMock->shouldReceive('get')->andReturn($this->userMock);
+        $this->userRepositoryMock->shouldReceive('save')->andReturn(null);
+        $this->passwordHashServiceMock->shouldReceive('hashPassword')->andReturn($this->faker->sentence);
+        $this->userMock->shouldReceive('getToken')->andReturn($token);
+        $this->userMock->shouldReceive('setToken')->andReturn($this->userMock);
+        $this->userMock->shouldReceive('setPasswordHash')->andReturn($this->userMock);
+        $this->userMock->shouldReceive('onPreUpdate')->andReturn($this->userMock);
+        $this->jwtService->shouldReceive('create')->andReturn($jwtToken = $this->faker->name);
+
+        $authService = new AuthService(
+            $this->userRepositoryMock,
+            $this->passwordHashServiceMock,
+            $this->jwtService,
+            $this->userTokenService,
+            $this->serializeService,
+            $this->authMailService
+        );
+
+        $result = $authService->newPassword(['password' => $this->faker->sentence], $this->faker->randomDigit);
+
+        $this->assertEquals($result, $jwtToken);
+    }
+    // Set new password
+
+    //Separate problems
+    /**
+     * @test
+     */
     public function userHaveNotToken(): void
     {
         $user = new User();
@@ -324,37 +483,6 @@ class AuthServiceTest extends Base
 
         $result = $authService->confirmRegisterUser(['user_id' => $this->faker->randomDigit, 'token' => $token]);
     }
-
-    /**
-     * @test
-     */
-    public function confirmRegisterUser(): void
-    {
-        $token = $this->faker->sentence;
-        $userTokenObject = new UserToken($token, 4102437600);
-
-        $this->userRepositoryMock->shouldReceive('get')->andReturn($this->userMock);
-        $this->userRepositoryMock->shouldReceive('save')->andReturn(null);
-        $this->userMock->shouldReceive('getToken')->andReturn($this->faker->sentence);
-        $this->userMock->shouldReceive('setStatus')->andReturn($this->userMock);
-        $this->userMock->shouldReceive('setToken')->andReturn($this->userMock);
-        $this->userMock->shouldReceive('onPreUpdate')->andReturn($this->userMock);
-        $this->serializeService->shouldReceive('deserialize')->andReturn($userTokenObject);
-        $this->jwtService->shouldReceive('create')->andReturn($jwtToken = $this->faker->name);
-
-        $authService = new AuthService(
-            $this->userRepositoryMock,
-            $this->passwordHashServiceMock,
-            $this->jwtService,
-            $this->userTokenService,
-            $this->serializeService,
-            $this->authMailService
-        );
-
-        $result = $authService->confirmRegisterUser(['user_id' => $this->faker->randomDigit, 'token' => $token]);
-
-        $this->assertEquals($result, $jwtToken);
-    }
-    // Confirm User
+    //Separate problems
 
 }

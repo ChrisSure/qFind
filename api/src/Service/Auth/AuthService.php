@@ -120,17 +120,8 @@ class AuthService
     public function confirmRegisterUser(array $data): string
     {
         $user = $this->userRepository->get($data['user_id']);
-        if ($user->getToken() === null) {
-            throw new NotFoundHttpException('Your user doesn\'t have token.');
-        }
-
-        $tokenObject = $this->serializeService->deserialize($user->getToken(), UserToken::class, 'json');
-        if ($tokenObject->getToken() != $data['token']) {
-            throw new \BadMethodCallException('You have missed data.');
-        }
-        if ($tokenObject->isExpiredToken()) {
-            throw new \InvalidArgumentException('Token time has overed.');
-        }
+        $this->hasToken($user);
+        $this->checkToken($user, $data['token']);
 
         $user->setStatus(User::$STATUS_ACTIVE);
         $user->setToken(null);
@@ -149,9 +140,12 @@ class AuthService
     public function forgetPassword(array $data): User
     {
         $user = $this->userRepository->getByEmail($data['email']);
-        $tokenObject = $this->serializeService->deserialize($user->getToken(), UserToken::class, 'json');
-        if (!$tokenObject->isExpiredToken()) {
-            throw new \BadMethodCallException('You change your password too often.');
+
+        if ($user->getToken() != null) {
+            $tokenObject = $this->serializeService->deserialize($user->getToken(), UserToken::class, 'json');
+            if (!$tokenObject->isExpiredToken()) {
+                throw new \BadMethodCallException('You change your password too often.');
+            }
         }
 
         $token = $this->userTokenService->generateToken();
@@ -162,6 +156,73 @@ class AuthService
         $this->authMailService->sendForgetPassword($user, $token->getToken());
 
         return $user;
+    }
+
+    /**
+     * Confirm new password
+     *
+     * @param array $data
+     * @return User
+     */
+    public function confirmNewPassword(array $data): User
+    {
+        $user = $this->userRepository->get($data['user_id']);
+        $this->hasToken($user);
+        $this->checkToken($user, $data['token']);
+        return $user;
+    }
+
+    /**
+     * Set new user password
+     *
+     * @param array $data
+     * @param int $id
+     * @return string
+     */
+    public function newPassword(array $data, $id): string
+    {
+        $user = $this->userRepository->get($id);
+        $this->hasToken($user);
+
+        $user->setPasswordHash($this->passwordHashService->hashPassword($user, $data['password']));
+        $user->setToken(null);
+        $user->onPreUpdate();
+        $this->userRepository->save($user);
+
+        return $this->jwtService->create($user);
+    }
+
+    /**
+     * Check user token
+     *
+     * @param User $user
+     * @param string $token
+     *
+     * @return void
+     */
+    private function checkToken(User $user, string $token): void
+    {
+        $tokenObject = $this->serializeService->deserialize($user->getToken(), UserToken::class, 'json');
+        if ($tokenObject->getToken() != $token) {
+            throw new \BadMethodCallException('You have missed data.');
+        }
+        if ($tokenObject->isExpiredToken()) {
+            throw new \InvalidArgumentException('Token time has overed.');
+        }
+    }
+
+    /**
+     * Check if user has token
+     *
+     * @param User $user
+     * @return bool
+     */
+    private function hasToken(User $user): bool
+    {
+        if ($user->getToken() === null) {
+            throw new NotFoundHttpException('Your user doesn\'t have token.');
+        }
+        return true;
     }
 
     /**

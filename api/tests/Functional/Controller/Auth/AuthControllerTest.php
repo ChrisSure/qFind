@@ -111,6 +111,83 @@ class AuthControllerTest extends Base
         $this->assertTrue(is_string($response->token));
     }
 
+    /**
+     * @test
+     */
+    public function forgotPasswordNotFoundUser(): void
+    {
+        $postData = ['email' => 'user_incorect@gmail.com'];
+
+        $this->client->request(
+            'POST',
+            '/auth/forget-password',
+            $postData
+        );
+
+        $response = json_decode($this->client->getResponse()->getContent());
+
+        $this->assertEquals($this->client->getResponse()->getStatusCode(), JsonResponse::HTTP_NOT_FOUND);
+        $this->assertEquals($response->error, 'User doesn\'t exist.');
+    }
+
+    /**
+     * @test
+     */
+    public function forgotPassword(): void
+    {
+        $postData = ['email' => $email = 'user@gmail.com'];
+
+        $this->client->request(
+            'POST',
+            '/auth/forget-password',
+            $postData
+        );
+
+        $response = json_decode($this->client->getResponse()->getContent());
+        $this->assertEquals($response->message, 'Check your email for the next step.');
+        $this->revertForgotPasswordChanges($email);
+    }
+
+    /**
+     * @test
+     */
+    public function confirmNewPassword(): void
+    {
+        $user = $this->createUser();
+        $queryData = ['user_id' => $user->getId(), 'token' => $this->token];
+        $this->client->request('GET', '/auth/confirm-new-password', $queryData);
+
+        $response = json_decode($this->client->getResponse()->getContent());
+        $this->revertChanges($user->getEmail());
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertEquals($response->message, 'Confirmed');
+    }
+
+    /**
+     * @test
+     */
+    public function newPassword(): void
+    {
+        $user = $this->createUser();
+        $postData = ['password' => '123'];
+
+        $this->client->request(
+            'POST',
+            '/auth/new-password/' . $user->getId(),
+            $postData
+        );
+
+        $response = json_decode($this->client->getResponse()->getContent());
+        $this->revertChanges($user->getEmail());
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertTrue(is_string($response->token));
+    }
+
+
+
+
     private function createUser(): User
     {
         $userTokenObject = new UserToken($this->token, 4102437600);
@@ -135,6 +212,14 @@ class AuthControllerTest extends Base
     {
         $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => $email]);
         $this->manager->remove($user);
+        $this->manager->flush();
+    }
+
+    private function revertForgotPasswordChanges($email): void
+    {
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => $email]);
+        $user->setToken(null);
+        $this->manager->persist($user);
         $this->manager->flush();
     }
 }
