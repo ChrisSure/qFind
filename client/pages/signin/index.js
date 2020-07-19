@@ -22,7 +22,7 @@ const SignIn = (props) => {
 
         let validationErrors = dispatch(authValidation(email, password));
         validationErrors.then((count) => {
-            if (count === 0) {
+            if (count === 0) {a
                 dispatch(signin(email, password));
                 dispatch(resetForm());
             }

@@ -273,7 +273,7 @@ class AuthServiceTest extends Base
             $this->authMailService
         );
 
-        $result = $authService->confirmRegisterUser(['user_id' => $this->faker->randomDigit, 'token' => $token]);
+        $result = $authService->confirmRegisterUser(['id' => $this->faker->randomDigit, 'token' => $token]);
 
         $this->assertEquals($result, $jwtToken);
     }
@@ -429,7 +429,7 @@ class AuthServiceTest extends Base
             $this->authMailService
         );
 
-        $result = $authService->confirmRegisterUser(['user_id' => $this->faker->randomDigit, 'token' => $this->faker->sentence]);
+        $result = $authService->confirmRegisterUser(['id' => $this->faker->randomDigit, 'token' => $this->faker->sentence]);
     }
 
     /**
@@ -455,7 +455,7 @@ class AuthServiceTest extends Base
             $this->authMailService
         );
 
-        $result = $authService->confirmRegisterUser(['user_id' => $this->faker->randomDigit, 'token' => $this->faker->sentence]);
+        $result = $authService->confirmRegisterUser(['id' => $this->faker->randomDigit, 'token' => $this->faker->sentence]);
     }
 
     /**
@@ -481,7 +481,7 @@ class AuthServiceTest extends Base
             $this->authMailService
         );
 
-        $result = $authService->confirmRegisterUser(['user_id' => $this->faker->randomDigit, 'token' => $token]);
+        $result = $authService->confirmRegisterUser(['id' => $this->faker->randomDigit, 'token' => $token]);
     }
     //Separate problems
 
