@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import Alert from "@material-ui/lab/Alert";
 
 
-const SignIn = (props) => {
+const conformRegister = (props) => {
     const dispatch = useDispatch();
     const {message, status} = useSelector(state => state.confirmRegister);
 
@@ -28,11 +28,10 @@ const SignIn = (props) => {
             <Header/>
             <aside>
                 {getMessage()}
-                <h1>Hello</h1>
             </aside>
             <Footer />
         </main>
     )
 }
 
-export default SignIn;
+export default conformRegister;

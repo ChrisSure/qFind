@@ -18,6 +18,9 @@ aside {
       color: $white;
       text-decoration: none;
     }
+    .forgot a {
+      color: $link-blue;
+    }
   }
   .root {
     & ul > li > * {

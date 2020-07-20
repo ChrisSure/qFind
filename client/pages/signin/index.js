@@ -77,6 +77,9 @@ const SignIn = (props) => {
                                 <li>
                                     <Button type="submit" variant="contained" color="primary">Login</Button>
                                 </li>
+                                <li className={styles.forgot}>
+                                    <Link href="/forgot-password">Forgot password</Link>
+                                </li>
                             </ul>
                         </form>
                     </Grid>
