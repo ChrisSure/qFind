@@ -1,0 +1,8 @@
+{% extends 'layouts/email.html.twig' %}
+
+{% block body %}
+    <div class="content">
+        <h4>Hello, In order to set new password</h4>
+        <p>Reffer, go to: <a href="{{ client_url }}/new-password?id={{ id }}&token={{ token }}">Set new password</a></p>
+    </div>
+{% endblock %}

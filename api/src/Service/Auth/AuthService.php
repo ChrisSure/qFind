@@ -3,7 +3,12 @@
 namespace App\Service\Auth;
 
 use App\Entity\User\User;
+use App\Entity\User\UserToken;
 use App\Repository\User\UserRepository;
+use App\Service\Email\AuthMailService;
+use App\Service\Helper\SerializeService;
+use App\Service\User\UserTokenService;
+use Facade\FlareClient\Http\Exceptions\NotFound;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -25,21 +30,46 @@ class AuthService
     private $jwtService;
 
     /**
+     * @var UserTokenService
+     */
+    private $userTokenService;
+
+    /**
+     * @var SerializeService
+     */
+    private $serializeService;
+
+    /**
+     * @var AuthMailService
+     */
+    private $authMailService;
+
+
+    /**
      * AuthService constructor.
      *
      * @param UserRepository $userRepository
      * @param PasswordHashService $passwordHashService
      * @param JWTService $jwtService
+     * @param UserTokenService $userTokenService
+     * @param SerializeService $serializeService
+     * @param AuthMailService $authMailService
      */
     public function __construct(
         UserRepository $userRepository,
         PasswordHashService $passwordHashService,
-        JWTService $jwtService
+        JWTService $jwtService,
+        UserTokenService $userTokenService,
+        SerializeService $serializeService,
+        AuthMailService $authMailService
     )
     {
         $this->passwordHashService = $passwordHashService;
         $this->userRepository = $userRepository;
         $this->jwtService = $jwtService;
+        $this->userTokenService = $userTokenService;
+        $this->serializeService = $serializeService;
+        $this->authMailService = $authMailService;
     }
 
     /**
@@ -52,6 +82,147 @@ class AuthService
     {
         $user = $this->checkCredentials($data);
         return $this->jwtService->create($user);
+    }
+
+    /**
+     * Create user on site
+     *
+     * @param array $data
+     * @return User $user
+     */
+    public function createUser(array $data): User
+    {
+        $user = $this->userRepository->findOneBy(['email' => $data['email']]);
+        if ($user !== null) {
+            throw new \InvalidArgumentException("User who has this email already exists.");
+        }
+
+        $token = $this->userTokenService->generateToken();
+        $user = new User();
+        $user->setEmail($data['email']);
+        $user->setPasswordHash($this->passwordHashService->hashPassword($user, $data['password']));
+        $user->setRoles(User::$ROLE_USER);
+        $user->setToken($this->serializeService->serialize($token));
+        $user->setStatus(User::$STATUS_NEW)->onPrePersist()->onPreUpdate();
+        $this->userRepository->save($user);
+
+        $this->authMailService->sendCheckRegistration($user, $token->getToken());
+
+        return $user;
+    }
+
+    /**
+     * Confirm register user
+     *
+     * @param array $data
+     * @return string
+     */
+    public function confirmRegisterUser(array $data): string
+    {
+        $user = $this->userRepository->get($data['id']);
+        $this->hasToken($user);
+        $this->checkToken($user, $data['token']);
+
+        $user->setStatus(User::$STATUS_ACTIVE);
+        $user->setToken(null);
+        $user->onPreUpdate();
+        $this->userRepository->save($user);
+
+        return $this->jwtService->create($user);
+    }
+
+    /**
+     * Forget user password
+     *
+     * @param array $data
+     * @return User $user
+     */
+    public function forgetPassword(array $data): User
+    {
+        $user = $this->userRepository->getByEmail($data['email']);
+
+        if ($user->getToken() != null) {
+            $tokenObject = $this->serializeService->deserialize($user->getToken(), UserToken::class, 'json');
+            if (!$tokenObject->isExpiredToken()) {
+                throw new \BadMethodCallException('You change your password too often.');
+            }
+        }
+
+        $token = $this->userTokenService->generateToken();
+
+        $user->setToken($this->serializeService->serialize($token))->onPreUpdate();
+        $this->userRepository->save($user);
+
+        $this->authMailService->sendForgetPassword($user, $token->getToken());
+
+        return $user;
+    }
+
+    /**
+     * Confirm new password
+     *
+     * @param array $data
+     * @return User
+     */
+    public function confirmNewPassword(array $data): User
+    {
+        $user = $this->userRepository->get($data['id']);
+        $this->hasToken($user);
+        $this->checkToken($user, $data['token']);
+        return $user;
+    }
+
+    /**
+     * Set new user password
+     *
+     * @param array $data
+     * @param int $id
+     * @return string
+     */
+    public function newPassword(array $data, $id): string
+    {
+        $user = $this->userRepository->get($id);
+        $this->hasToken($user);
+
+        $user->setPasswordHash($this->passwordHashService->hashPassword($user, $data['password']));
+        $user->setToken(null);
+        $user->onPreUpdate();
+        $this->userRepository->save($user);
+
+        return $this->jwtService->create($user);
+    }
+
+    /**
+     * Check user token
+     *
+     * @param User $user
+     * @param string $token
+     *
+     * @return void
+     */
+    private function checkToken(User $user, string $token): void
+    {
+        $tokenObject = $this->serializeService->deserialize($user->getToken(), UserToken::class, 'json');
+        if ($tokenObject->getToken() != $token) {
+            throw new \BadMethodCallException('You have missed data.');
+        }
+        if ($tokenObject->isExpiredToken()) {
+            throw new \InvalidArgumentException('Token time has overed.');
+        }
+    }
+
+    /**
+     * Check if user has token
+     *
+     * @param User $user
+     * @return bool
+     */
+    private function hasToken(User $user): bool
+    {
+        if ($user->getToken() === null) {
+            throw new NotFoundHttpException('Your user doesn\'t have token.');
+        }
+        return true;
     }
 
     /**
@@ -77,4 +248,5 @@ class AuthService
 
         return $user;
     }
+
 }

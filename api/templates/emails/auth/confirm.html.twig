@@ -1,0 +1,8 @@
+{% extends 'layouts/email.html.twig' %}
+
+{% block body %}
+    <div class="content">
+        <h4>Hello, you must confirm your email and finish registration!</h4>
+        <p>Reffer, go to: <a href="{{ client_url }}/confirm-register?id={{ id }}&token={{ token }}">Finish registration</a></p>
+    </div>
+{% endblock %}

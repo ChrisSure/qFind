@@ -7,11 +7,12 @@ php bin/console make:migration                      ---- create migrations with 
 php bin/console doctrine:migrations:migrate         ---- import migrate to db
 php bin/console doctrine:fixtures:load              ---- load fixture to db
 php bin/phpunit                                     ---- run php unit tests Symfony
-php artisan test                               ---- run php unit tests Laravel
+php artisan test                                    ---- run php unit tests Laravel
 
 php bin/console doctrine:fixtures:load --env=test   ---- test enviroment
 
 docker inspect <container_id>                       ---- detail information about container
+docker logs --details <container_id>                ---- Logs docker container
 docker ps -a                                        ---- list of containers docker
 sudo systemctl stop docker                               ---- Docker stop
 sudo systemctl start docker                              ---- Docker start

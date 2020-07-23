@@ -82,8 +82,9 @@ class UserService
      * Create user
      *
      * @param array $data
+     * @return User $user
      */
-    public function create(array $data): void
+    public function create(array $data): User
     {
         $user = $this->userRepository->findOneBy(['email' => $data['email']]);
         if ($user !== null) {
@@ -96,6 +97,8 @@ class UserService
         $user->setRoles($data['role']);
         $user->setStatus($data['status'])->onPrePersist()->onPreUpdate();
         $this->userRepository->save($user);
+
+        return $user;
     }
 
     /**
@@ -103,8 +106,9 @@ class UserService
      *
      * @param array $data
      * @param int $id
+     * @return User $user
      */
-    public function update(array $data, $id): void
+    public function update(array $data, $id): User
     {
         $user = $this->userRepository->get($id);
         $user->setEmail($data['email']);
@@ -114,6 +118,8 @@ class UserService
         $user->setRoles($data['role']);
         $user->setStatus($data['status'])->onPreUpdate();
         $this->userRepository->save($user);
+
+        return $user;
     }
 
     /**
@@ -132,25 +138,29 @@ class UserService
      * Activate user
      *
      * @param $id
-     * @return void
+     * @return User $user
      */
-    public function activate($id): void
+    public function activate($id): User
     {
         $user = $this->userRepository->get($id);
         $user->setStatus(User::$STATUS_ACTIVE);
         $this->userRepository->save($user);
+
+        return $user;
     }
 
     /**
      * Block user
      *
      * @param $id
-     * @return void
+     * @return User $user
      */
-    public function block($id): void
+    public function block($id): User
     {
         $user = $this->userRepository->get($id);
         $user->setStatus(User::$STATUS_BLOCKED);
         $this->userRepository->save($user);
+
+        return $user;
     }
 }

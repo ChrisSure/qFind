@@ -6,6 +6,7 @@ use App\Entity\User\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
+use Faker\Factory;
 
 class Base extends WebTestCase
 {
@@ -15,11 +16,14 @@ class Base extends WebTestCase
 
     protected $manager;
 
+    protected $faker;
+
     protected function setUp(): void
     {
         $this->client = static::createClient();
         $this->doctrine = self::$container->get('doctrine');
         $this->manager = $this->doctrine->getManager();
+        $this->faker = Factory::create();
     }
 
     /**

@@ -45,6 +45,22 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
+     * Get user by email
+     *
+     * @param $email
+     * @return User
+     */
+    public function getByEmail($email): User
+    {
+        $user = $this->findOneBy([
+            'email' => $email
+        ]);
+        if (!$user)
+            throw new NotFoundHttpException('User doesn\'t exist.');
+        return $user;
+    }
+
+    /**
      * Get all users
      *
      * @param $email
