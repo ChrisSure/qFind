@@ -74,4 +74,5 @@ class JWTService
         );
         return $this->encode($data);
     }
+
 }

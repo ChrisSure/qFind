@@ -42,19 +42,19 @@ class CreateUserControllerTest extends Base
     public function createSuccessfull(): void
     {
         $this->signIn(User::$ROLE_ADMIN);
-        $data = ['email' => 'admin_test@gmail.com', 'password' => '123', 'role' => User::$ROLE_ADMIN, 'status' => User::$STATUS_ACTIVE];
+        $data = ['email' => $email = 'admin_test@gmail.com', 'password' => '123', 'role' => User::$ROLE_ADMIN, 'status' => User::$STATUS_ACTIVE];
         $this->client->request('POST', '/users', $data);
         $response = json_decode($this->client->getResponse()->getContent());
 
         $this->assertEquals($this->client->getResponse()->getStatusCode(), JsonResponse::HTTP_CREATED);
         $this->assertEquals($response->message, 'Created successfull');
 
-        $this->revertChanges();
+        $this->revertChanges($email);
     }
 
-    private function revertChanges()
+    private function revertChanges($email)
     {
-        $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => 'admin_test@gmail.com']);
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => $email]);
         $this->manager->remove($user);
         $this->manager->flush();
     }
