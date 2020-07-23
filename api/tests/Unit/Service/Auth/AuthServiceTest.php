@@ -365,7 +365,7 @@ class AuthServiceTest extends Base
             $this->authMailService
         );
 
-        $result = $authService->confirmNewPassword(['user_id' => $this->faker->randomDigit, 'token' => $token]);
+        $result = $authService->confirmNewPassword(['id' => $this->faker->randomDigit, 'token' => $token]);
 
         $this->assertTrue(is_object($result));
         $this->assertEquals($result->getToken(), $token);

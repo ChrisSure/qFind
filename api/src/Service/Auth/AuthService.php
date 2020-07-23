@@ -166,7 +166,7 @@ class AuthService
      */
     public function confirmNewPassword(array $data): User
     {
-        $user = $this->userRepository->get($data['user_id']);
+        $user = $this->userRepository->get($data['id']);
         $this->hasToken($user);
         $this->checkToken($user, $data['token']);
         return $user;

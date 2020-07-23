@@ -13,7 +13,7 @@ import {signin} from "../../redux/actions/authAction";
 import Alert from '@material-ui/lab/Alert';
 
 
-const SignIn = (props) => {
+const SignIn = () => {
     const dispatch = useDispatch();
     const {email, password, errors} = useSelector(state => state.auth);
 
@@ -22,7 +22,7 @@ const SignIn = (props) => {
 
         let validationErrors = dispatch(authValidation(email, password));
         validationErrors.then((count) => {
-            if (count === 0) {a
+            if (count === 0) {
                 dispatch(signin(email, password));
                 dispatch(resetForm());
             }

@@ -43,4 +43,10 @@ export default class Validation {
         }
     }
 
+    isCompare(value, value_repeat) {
+        if (value !== value_repeat) {
+            this.errors.push(`Values don't compare.`);
+        }
+    }
+
 }

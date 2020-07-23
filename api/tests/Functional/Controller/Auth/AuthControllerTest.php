@@ -154,7 +154,7 @@ class AuthControllerTest extends Base
     public function confirmNewPassword(): void
     {
         $user = $this->createUser();
-        $queryData = ['user_id' => $user->getId(), 'token' => $this->token];
+        $queryData = ['id' => $user->getId(), 'token' => $this->token];
         $this->client->request('GET', '/auth/confirm-new-password', $queryData);
 
         $response = json_decode($this->client->getResponse()->getContent());

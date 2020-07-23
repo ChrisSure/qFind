@@ -34,7 +34,6 @@ export const forgotPasswordSend = (email) =>async dispatch=> {
             message: response.data.message,
         });
     }).catch(function (error) {
-        console.log(error.response);
         dispatch({
             type: typesForgotPassword.FORGOT_PASSWORD_VALIDATION,
             errors: [error.response.data.error],
