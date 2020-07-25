@@ -11,6 +11,8 @@ import * as types from "../../redux/types/authTypes";
 import {authValidation, resetForm} from "../../redux/actions/authAction";
 import {signin} from "../../redux/actions/authAction";
 import Alert from '@material-ui/lab/Alert';
+import FacebookLogin from 'react-facebook-login';
+import GoogleLogin from 'react-google-login';
 
 
 const SignIn = () => {
@@ -40,6 +42,14 @@ const SignIn = () => {
     const resetFormAll = () => {
         dispatch(resetForm());
     };
+
+    const responseFacebook = (response) => {
+        console.log(response);
+    }
+
+    const responseGoogle = (response) => {
+        console.log(response);
+    }
 
     return (
         <main>
@@ -79,6 +89,21 @@ const SignIn = () => {
                                 </li>
                                 <li className={styles.forgot}>
                                     <Link href="/forgot-password">Forgot password</Link>
+                                </li>
+                                <li>
+                                    <FacebookLogin
+                                        appId="1541183036061327" //APP ID NOT CREATED YET
+                                        fields="name,email,picture"
+                                        callback={responseFacebook}
+                                    />
+                                </li>
+                                <li>
+                                    <GoogleLogin
+                                        clientId="773947189913-lnnd2cd1una5upf96jugghv474bp9pbc.apps.googleusercontent.com" //CLIENTID NOT CREATED YET
+                                        buttonText="LOGIN WITH GOOGLE"
+                                        onSuccess={responseGoogle}
+                                        onFailure={responseGoogle}
+                                    />
                                 </li>
                             </ul>
                         </form>

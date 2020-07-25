@@ -53,7 +53,7 @@ class AppFixtures extends Fixture
         $socialUser->setProvider($socialUser::$PROVIDER_FACEBOOK);
         $socialUser->setName($this->faker->name);
         $socialUser->setImage($this->faker->image());
-        $socialUser->setToken($this->faker->sha256);
+        $socialUser->setAppId("1mm8x29c3890");
         $socialUser->setUser($user);
 
         $manager->persist($user);
