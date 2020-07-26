@@ -2,8 +2,10 @@
 
 namespace App\Service\Auth;
 
+use App\Entity\User\SocialUser;
 use App\Entity\User\User;
 use App\Entity\User\UserToken;
+use App\Repository\User\SocialUserRepository;
 use App\Repository\User\UserRepository;
 use App\Service\Email\AuthMailService;
 use App\Service\Helper\SerializeService;
@@ -54,6 +56,7 @@ class AuthService
      * @param UserTokenService $userTokenService
      * @param SerializeService $serializeService
      * @param AuthMailService $authMailService
+     * @param SocialUserRepository $socialUserRepository
      */
     public function __construct(
         UserRepository $userRepository,
@@ -61,7 +64,8 @@ class AuthService
         JWTService $jwtService,
         UserTokenService $userTokenService,
         SerializeService $serializeService,
-        AuthMailService $authMailService
+        AuthMailService $authMailService,
+        SocialUserRepository $socialUserRepository
     )
     {
         $this->passwordHashService = $passwordHashService;
@@ -70,6 +74,7 @@ class AuthService
         $this->userTokenService = $userTokenService;
         $this->serializeService = $serializeService;
         $this->authMailService = $authMailService;
+        $this->socialUserRepository = $socialUserRepository;
     }
 
     /**
@@ -193,6 +198,44 @@ class AuthService
     }
 
     /**
+     * Login user using social networks
+     *
+     * @param array $data
+     * @return string
+     */
+    public function loginSocialUser(array $data): string
+    {
+        if (!in_array($data['provider'], SocialUser::$listProviders))
+            throw new NotFoundHttpException('Provider' . $data['provider'] . ' doesn\'t exist.');
+
+        $user = $this->userRepository->findOneBy(['email' => $data['email']]);
+        if (!$user) {
+            $user = new User();
+            $user->setEmail($data['email'])->setRoles(User::$ROLE_USER)->setStatus(User::$STATUS_ACTIVE)
+                ->onPrePersist()->onPreUpdate();
+            $this->userRepository->save($user);
+        }
+        if (!in_array($data['provider'], $this->getArrayProviders($user))) {
+            $socialUser = new SocialUser();
+            $socialUser->setUser($user)->setAppId($data['app_id'])->setProvider($data['provider'])
+                ->setName($data['name'])->setImage($data['image']);
+            $this->socialUserRepository->save($socialUser);
+        } else {
+            $result = false;
+            foreach($user->getSocial() as $value) {
+                if ($value->getAppId() === $data['app_id'] && $value->getProvider() === $data['provider']) {
+                    $result = true;
+                }
+            }
+            if (!$result) {
+                throw new \InvalidArgumentException('Mistake data.');
+            }
+        }
+
+        return $this->jwtService->create($user);
+    }
+
+    /**
      * Check user token
      *
      * @param User $user
@@ -223,6 +266,20 @@ class AuthService
             throw new NotFoundHttpException('Your user doesn\'t have token.');
         }
         return true;
+    }
+
+    /**
+     * Return array social providers
+     * @param User $user
+     * @return array
+     */
+    private function getArrayProviders(User $user): array
+    {
+        $array_providers = [];
+        foreach ($user->getSocial() as $value) {
+            $array_providers[] = $value->getProvider();
+        }
+        return $array_providers;
     }
 
     /**
