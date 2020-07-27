@@ -235,6 +235,7 @@ class AuthService
         return $this->jwtService->create($user);
     }
 
+
     /**
      * Check user token
      *

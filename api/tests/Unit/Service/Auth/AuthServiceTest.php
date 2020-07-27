@@ -4,6 +4,7 @@ namespace App\Tests\Unit\Service\Auth;
 
 use App\Entity\User\User;
 use App\Entity\User\UserToken;
+use App\Repository\User\SocialUserRepository;
 use App\Repository\User\UserRepository;
 use App\Service\Auth\AuthService;
 use App\Service\Auth\JWTService;
@@ -12,6 +13,7 @@ use App\Service\Email\AuthMailService;
 use App\Service\Helper\SerializeService;
 use App\Service\User\UserTokenService;
 use App\Tests\Unit\Base;
+use Doctrine\Common\Collections\ArrayCollection;
 use Mockery;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -34,6 +36,8 @@ class AuthServiceTest extends Base
 
     private $authMailService;
 
+    private $socialUserRepository;
+
 
     protected function setUp(): void
     {
@@ -46,6 +50,7 @@ class AuthServiceTest extends Base
         $this->userTokenService = Mockery::mock(UserTokenService::class);
         $this->serializeService = Mockery::mock(SerializeService::class);
         $this->authMailService = Mockery::mock(AuthMailService::class);
+        $this->socialUserRepository = Mockery::mock(SocialUserRepository::class);
     }
 
     // Login user
@@ -65,7 +70,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
         $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'site']);
 
@@ -89,7 +95,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
         $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'admin']);
 
@@ -113,7 +120,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
         $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'admin']);
 
@@ -138,7 +146,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
         $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'site']);
     }
@@ -161,7 +170,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
         $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'site']);
     }
@@ -185,7 +195,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
         $result = $authService->loginUser(['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'admin']);
     }
@@ -210,7 +221,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
         $result = $authService->createUser(['email' => $this->faker->email, 'password' => $this->faker->password, 'type' => 'site']);
     }
@@ -237,7 +249,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
         $result = $authService->createUser(['email' => $email = $this->faker->email, 'password' => $this->faker->password, 'type' => 'site']);
 
@@ -270,7 +283,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
 
         $result = $authService->confirmRegisterUser(['id' => $this->faker->randomDigit, 'token' => $token]);
@@ -300,7 +314,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
 
         $result = $authService->forgetPassword(['email' => $this->faker->email]);
@@ -333,7 +348,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
 
         $result = $authService->forgetPassword(['email' => $email]);
@@ -362,7 +378,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
 
         $result = $authService->confirmNewPassword(['id' => $this->faker->randomDigit, 'token' => $token]);
@@ -396,7 +413,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
 
         $result = $authService->newPassword(['password' => $this->faker->sentence], $this->faker->randomDigit);
@@ -404,6 +422,52 @@ class AuthServiceTest extends Base
         $this->assertEquals($result, $jwtToken);
     }
     // Set new password
+
+    // Social login
+    /**
+     * @test
+     */
+    public function providerNotExist(): void
+    {
+        $this->expectException(NotFoundHttpException::class);
+
+        $authService = new AuthService(
+            $this->userRepositoryMock,
+            $this->passwordHashServiceMock,
+            $this->jwtService,
+            $this->userTokenService,
+            $this->serializeService,
+            $this->authMailService,
+            $this->socialUserRepository
+        );
+
+        $result = $authService->loginSocialUser(['provider' => 'facebooks']);
+    }
+
+    /**
+     * @test
+     */
+    public function loginSocialSuccess(): void
+    {
+        $this->userRepositoryMock->shouldReceive('findOneBy')->andReturn($this->userMock);
+        $this->socialUserRepository->shouldReceive('save')->andReturn($this->userMock);
+        $this->userMock->shouldReceive('getSocial')->andReturn(new ArrayCollection());
+        $this->jwtService->shouldReceive('create')->andReturn($jwtToken = $this->faker->name);
+
+        $authService = new AuthService(
+            $this->userRepositoryMock,
+            $this->passwordHashServiceMock,
+            $this->jwtService,
+            $this->userTokenService,
+            $this->serializeService,
+            $this->authMailService,
+            $this->socialUserRepository
+        );
+
+        $result = $authService->loginSocialUser(['provider' => 'facebook', 'email' => $this->faker->email, 'app_id' => 12345, 'name' => $this->faker->name, 'image' => $this->faker->sentence]);
+        $this->assertEquals($result, $jwtToken);
+    }
+    // Social login
 
     //Separate problems
     /**
@@ -426,7 +490,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
 
         $result = $authService->confirmRegisterUser(['id' => $this->faker->randomDigit, 'token' => $this->faker->sentence]);
@@ -452,7 +517,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
 
         $result = $authService->confirmRegisterUser(['id' => $this->faker->randomDigit, 'token' => $this->faker->sentence]);
@@ -478,7 +544,8 @@ class AuthServiceTest extends Base
             $this->jwtService,
             $this->userTokenService,
             $this->serializeService,
-            $this->authMailService
+            $this->authMailService,
+            $this->socialUserRepository
         );
 
         $result = $authService->confirmRegisterUser(['id' => $this->faker->randomDigit, 'token' => $token]);
