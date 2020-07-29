@@ -2,6 +2,7 @@
 
 namespace App\Tests\Functional\Controller\Auth;
 
+use App\Entity\User\SocialUser;
 use App\Entity\User\User;
 use App\Entity\User\UserToken;
 use App\Service\Helper\SerializeService;
@@ -185,6 +186,26 @@ class AuthControllerTest extends Base
         $this->assertTrue(is_string($response->token));
     }
 
+    /**
+     * @test
+     */
+    public function loginSocial(): void
+    {
+        $user = $this->createUser();
+        $postData = ['provider' => 'facebook', 'email' => $user->getEmail(), 'app_id' => $appId = 12345, 'name' => $this->faker->name, 'image' => $this->faker->sentence];
+
+        $this->client->request(
+            'POST',
+            '/auth/signin-social',
+            $postData
+        );
+
+        $response = json_decode($this->client->getResponse()->getContent());
+        $this->revertChangesSocial($appId);
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertTrue(is_string($response->token));
+    }
 
 
 
@@ -206,6 +227,13 @@ class AuthControllerTest extends Base
         $this->manager->flush();
 
         return $user;
+    }
+
+    private function revertChangesSocial($appId): void
+    {
+        $socialUser = $this->doctrine->getRepository(SocialUser::class)->findOneBy(['appId' => $appId]);
+        $this->manager->remove($socialUser);
+        $this->manager->flush();
     }
 
     private function revertChanges($email): void

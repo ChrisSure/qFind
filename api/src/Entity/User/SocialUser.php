@@ -31,7 +31,7 @@ class SocialUser
     private $provider;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=100)
      */
     private $name;
 
@@ -41,9 +41,9 @@ class SocialUser
     private $image;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=100)
      */
-    private $token;
+    private $appId;
 
     public static $PROVIDER_FACEBOOK = "facebook";
     public static $PROVIDER_GOOGLE = "google";
@@ -136,18 +136,18 @@ class SocialUser
     /**
      * @return string
      */
-    public function getToken(): string
+    public function getAppId(): string
     {
-        return $this->token;
+        return $this->appId;
     }
 
     /**
-     * @param mixed $token
+     * @param mixed $appId
      * @return SocialUser
      */
-    public function setToken($token): self
+    public function setAppId($appId): self
     {
-        $this->token = $token;
+        $this->appId = $appId;
         return $this;
     }
 }

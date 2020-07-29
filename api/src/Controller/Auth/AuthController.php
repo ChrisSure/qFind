@@ -181,5 +181,25 @@ class AuthController extends AbstractController
         }
     }
 
+    /**
+     * Login using social networks
+     * @Route("/signin-social",  methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function loginSocial(Request $request): JsonResponse
+    {
+        $data = $request->request->all();
+
+        try {
+            $token = $this->authService->loginSocialUser($data);
+            return new JsonResponse(['token' => $token], 201);
+        } catch (NotFoundHttpException $e) {
+            return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
+        } catch (\InvalidArgumentException $e) {
+            return new JsonResponse(["error" => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
+        }
+    }
+
 
 }
