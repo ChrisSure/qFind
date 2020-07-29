@@ -206,7 +206,7 @@ class AuthService
     public function loginSocialUser(array $data): string
     {
         if (!in_array($data['provider'], SocialUser::$listProviders))
-            throw new NotFoundHttpException('Provider' . $data['provider'] . ' doesn\'t exist.');
+            throw new NotFoundHttpException('Provider ' . $data['provider'] . ' doesn\'t exist.');
 
         $user = $this->userRepository->findOneBy(['email' => $data['email']]);
         if (!$user) {

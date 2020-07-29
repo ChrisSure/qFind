@@ -8,11 +8,12 @@ import Link from "next/link";
 import Grid from '@material-ui/core/Grid';
 import {useDispatch, useSelector} from "react-redux";
 import * as types from "../../redux/types/authTypes";
-import {authValidation, resetForm} from "../../redux/actions/authAction";
+import {authValidation, resetForm, socialSignIn} from "../../redux/actions/authAction";
 import {signin} from "../../redux/actions/authAction";
 import Alert from '@material-ui/lab/Alert';
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
+import {SocialUser} from "../../models/auth/SocialUser";
 
 
 const SignIn = () => {
@@ -44,11 +45,25 @@ const SignIn = () => {
     };
 
     const responseFacebook = (response) => {
-        console.log(response);
+        let socialUser = new SocialUser();
+        socialUser.email = response.email;
+        socialUser.provider = 'facebook';
+        socialUser.name = response.name;
+        socialUser.image = response.picture.data.url;
+        socialUser.appId = response.id;
+
+        dispatch(socialSignIn(socialUser));
     }
 
     const responseGoogle = (response) => {
-        console.log(response);
+        let socialUser = new SocialUser();
+        socialUser.email = response.profileObj.email;
+        socialUser.provider = 'google';
+        socialUser.name = response.profileObj.name;
+        socialUser.image = response.profileObj.imageUrl;
+        socialUser.appId = response.googleId;
+
+        dispatch(socialSignIn(socialUser));
     }
 
     return (
