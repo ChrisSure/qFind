@@ -19,7 +19,7 @@ const Header = () => {
                 </Link>
             </h1>
             <Button variant="outlined" color="secondary" className={styles.sign_in_icon}>
-                <Link href="/signin">
+                <Link href="/auth/signin">
                     <a onClick={resetFormAll}>SignIn</a>
                 </Link>
             </Button>

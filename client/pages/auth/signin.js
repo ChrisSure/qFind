@@ -103,7 +103,7 @@ const SignIn = () => {
                                     <Button type="submit" variant="contained" color="primary">Login</Button>
                                 </li>
                                 <li className={styles.forgot}>
-                                    <Link href="/forgot-password">Forgot password</Link>
+                                    <Link href="/auth/forgot-password">Forgot password</Link>
                                 </li>
                                 <li>
                                     <FacebookLogin
@@ -129,7 +129,7 @@ const SignIn = () => {
                         <ul>
                             <li>
                                 <Button variant="contained" color="secondary">
-                                    <Link href="/signup">
+                                    <Link href="/auth/signup">
                                         <a onClick={resetFormAll}> Create account</a>
                                     </Link>
                                 </Button>
