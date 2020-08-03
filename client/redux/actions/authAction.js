@@ -1,8 +1,7 @@
 import * as typesAuth from "../types/authTypes";
-import * as typesToken from "../types/tokenTypes";
 import Base from "../helpers/Validation";
 import axios from 'axios';
-import {SocialUser} from "../../models/auth/SocialUser";
+import {setToken} from "./tokenAction";
 
 
 export const authValidation = (email, password) =>async dispatch=>{
@@ -38,10 +37,7 @@ export const signin = (email, password) =>async dispatch=> {
         url: 'http://localhost:9999/auth/signin',
         data: params
     }).then(function (response) {
-            dispatch({
-                type: typesToken.TOKEN_SET_TOKEN,
-                token: response.data.token,
-            });
+        dispatch(setToken(response.data.token));
     }).catch(function (error) {
         dispatch({
             type: typesAuth.AUTH_VALIDATION,
@@ -86,10 +82,7 @@ export const socialSignIn = (SocialUser) =>async dispatch=> {
         url: 'http://localhost:9999/auth/signin-social',
         data: params
     }).then(function (response) {
-        dispatch({
-            type: typesToken.TOKEN_SET_TOKEN,
-            token: response.data.token,
-        });
+        dispatch(setToken(response.data.token));
     }).catch(function (error) {
         let errorText = (typeof error.response.data.error !== "undefined") ? error.response.data.error : error.response.data.detail;
         dispatch({

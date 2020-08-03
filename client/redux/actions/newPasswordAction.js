@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as typesNewPassword from "../types/newPasswordTypes";
 import Base from "../helpers/Validation";
-import * as typesToken from "../types/tokenTypes";
+import {setToken} from "./tokenAction";
 
 export const confirmNewPassword = (queryString) =>async dispatch=> {
     axios({
@@ -45,10 +45,7 @@ export const newPasswordSend = (id, password) =>async dispatch=> {
         url: 'http://localhost:9999/auth/new-password/' + id,
         data: params
     }).then(function (response) {
-        dispatch({
-            type: typesToken.TOKEN_SET_TOKEN,
-            token: response.data.token,
-        });
+        dispatch(setToken(response.data.token));
     }).catch(function (error) {
         dispatch({
             type: typesNewPassword.NEW_PASSWORD_VALIDATION,

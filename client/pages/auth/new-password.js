@@ -12,7 +12,7 @@ import * as qs from 'query-string';
 import Router from 'next/router'
 
 
-const newPassword = (props) => {
+const newPassword = () => {
     const dispatch = useDispatch();
     const {password, password_repeat, errors, message, status} = useSelector(state => state.newPassword);
 

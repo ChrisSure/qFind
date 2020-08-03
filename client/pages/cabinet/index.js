@@ -3,16 +3,17 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 
 
-const cabinetHome = () => {
+const cabinet = () => {
+
     return (
         <main>
             <Header/>
             <aside>
-                <h1>Cabinet.Home</h1>
+                <h1>Cabinet</h1>
             </aside>
             <Footer />
         </main>
     )
 }
 
-export default cabinetHome;
+export default cabinet;

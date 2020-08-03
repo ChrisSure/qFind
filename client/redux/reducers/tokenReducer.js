@@ -7,7 +7,6 @@ const initialState = {
 export const tokenReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.TOKEN_SET_TOKEN:
-            console.log(action.token);
             return {
                 ...state,
                 token:action.token,

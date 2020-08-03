@@ -1,22 +1,36 @@
-import App from "next/app";
-import React from "react";
-import { Provider } from 'react-redux'
+import React, {useEffect} from "react";
+import {Provider, useDispatch, useSelector} from 'react-redux'
 import {createWrapper} from "next-redux-wrapper";
 import store from '../redux/store';
+import { useRouter } from 'next/router';
+import {getToken} from "../redux/actions/tokenAction";
 
 
-class MyApp extends App {
-    render() {
-        const {Component, pageProps} = this.props;
-        return (
-            <Provider store={store}>
-                <Component {...pageProps} />
-            </Provider>
-        )
-    }
+const myApp = (props) => {
+    const {Component, pageProps} = props;
+    const router = useRouter();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        let token = dispatch(getToken());
+        token.then((token) => {
+            if (token === null && router.pathname.substring(0, 8) === '/cabinet') {
+                router.push('/auth/signin');
+            } else if (token !== null && router.pathname.substring(0, 5) === '/auth') {
+                router.push('/cabinet');
+            }
+        });
+    });
+
+    return (
+        <Provider store={store}>
+            <Component {...pageProps} />
+        </Provider>
+    )
+
 }
 
 const makeStore = () => store;
 const wrapper = createWrapper(makeStore);
 
-export default wrapper.withRedux(MyApp);
+export default wrapper.withRedux(myApp);

@@ -17,8 +17,11 @@ export default function Home() {
       <main>
           <Header/>
             <aside>
-                <Link href="/cabinet/home">
+                <Link href="/cabinet">
                     <a>Cabinet</a>
+                </Link>
+                <Link href="/cabinet/home">
+                    <a>Cabinet.Home</a>
                 </Link>
             </aside>
           <Footer />

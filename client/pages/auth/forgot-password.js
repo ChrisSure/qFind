@@ -11,7 +11,7 @@ import Alert from "@material-ui/lab/Alert";
 
 
 
-const forgotPassword = (props) => {
+const forgotPassword = () => {
     const dispatch = useDispatch();
     const {email, errors, message} = useSelector(state => state.forgotPassword);
 

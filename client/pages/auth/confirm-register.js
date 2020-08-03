@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import Alert from "@material-ui/lab/Alert";
 
 
-const conformRegister = (props) => {
+const conformRegister = () => {
     const dispatch = useDispatch();
     const {message, status} = useSelector(state => state.confirmRegister);
 
