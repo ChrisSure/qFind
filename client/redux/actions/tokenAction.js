@@ -12,5 +12,9 @@ export const setToken = (token) =>async dispatch=>{
 
 export const getToken = () =>async dispatch=>{
     let token = localStorage.getItem('jwt_token');
+    dispatch({
+        type: typesToken.TOKEN_SET_TOKEN,
+        token: token,
+    });
     return token;
 }

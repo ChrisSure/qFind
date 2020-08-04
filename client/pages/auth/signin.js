@@ -14,12 +14,10 @@ import Alert from '@material-ui/lab/Alert';
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
 import {SocialUser} from "../../models/auth/SocialUser";
-import {useRouter} from "next/router";
 
 
 const SignIn = () => {
     const dispatch = useDispatch();
-    const router = useRouter();
     const {email, password, errors} = useSelector(state => state.auth);
 
     const handleOnSubmit = (event) => {
