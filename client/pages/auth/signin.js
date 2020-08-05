@@ -14,20 +14,22 @@ import Alert from '@material-ui/lab/Alert';
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
 import {SocialUser} from "../../models/auth/SocialUser";
+import {useRouter} from "next/router";
 
 
 const SignIn = () => {
     const dispatch = useDispatch();
-    const {email, password, errors} = useSelector(state => state.auth);
+    const router = useRouter();
+    const {email, password, errors, isFormValid} = useSelector(state => state.auth);
 
     const handleOnSubmit = (event) => {
         event.preventDefault();
 
-        let validationErrors = dispatch(authValidation(email, password));
+        const validationErrors = dispatch(authValidation(email, password));
         validationErrors.then((count) => {
             if (count === 0) {
-                dispatch(signin(email, password));
                 dispatch(resetForm());
+                dispatch(signin(email, password));
             }
         });
     };
@@ -53,6 +55,7 @@ const SignIn = () => {
         socialUser.appId = response.id;
 
         dispatch(socialSignIn(socialUser));
+        redirectAfterLogin();
     }
 
     const responseGoogle = (response) => {
@@ -64,6 +67,11 @@ const SignIn = () => {
         socialUser.appId = response.googleId;
 
         dispatch(socialSignIn(socialUser));
+        redirectAfterLogin();
+    }
+
+    const redirectAfterLogin = () => {
+        router.push('/');
     }
 
     return (

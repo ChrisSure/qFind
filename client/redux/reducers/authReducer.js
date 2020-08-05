@@ -27,7 +27,7 @@ export const authReducer = (state = initialState, action) => {
         case types.AUTH_SIGNUP_SUCCESS:
             return {
                 ...state,
-                message: action.message
+                message: action.message,
             }
         case types.AUTH_RESET_FORM:
             return {
@@ -36,7 +36,6 @@ export const authReducer = (state = initialState, action) => {
                 message: '',
                 errors: [],
             }
-
         default:
             return state;
     }

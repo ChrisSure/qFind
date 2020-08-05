@@ -38,6 +38,7 @@ export const signin = (email, password) =>async dispatch=> {
         data: params
     }).then(function (response) {
         dispatch(setToken(response.data.token));
+        window.location.href = '/';
     }).catch(function (error) {
         dispatch({
             type: typesAuth.AUTH_VALIDATION,
