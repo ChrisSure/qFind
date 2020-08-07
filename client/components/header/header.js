@@ -7,6 +7,7 @@ import {resetForm} from "../../redux/actions/authAction";
 const Header = () => {
     const dispatch = useDispatch();
     const {token} = useSelector(state => state.token);
+    const {userEmail} = useSelector(state => state.userInfoReducer);
 
     const resetFormAll = () => {
         dispatch(resetForm());
@@ -14,7 +15,7 @@ const Header = () => {
 
     const showSignButton = () => {
         if (token) {
-            return (<h1>Hello</h1>);
+            return (<h1>{userEmail}</h1>);
         } else {
             return(
                 <Button variant="outlined" color="secondary" className={styles.sign_in_icon}>

@@ -2,6 +2,7 @@ import * as typesAuth from "../types/authTypes";
 import Base from "../helpers/Validation";
 import axios from 'axios';
 import {setToken} from "./tokenAction";
+import {setUserInfo} from "./userInfoAction";
 
 
 export const authValidation = (email, password) =>async dispatch=>{
@@ -38,6 +39,7 @@ export const signin = (email, password) =>async dispatch=> {
         data: params
     }).then(function (response) {
         dispatch(setToken(response.data.token));
+        dispatch(setUserInfo(response.data.token));
         window.location.href = '/';
     }).catch(function (error) {
         dispatch({
@@ -84,6 +86,7 @@ export const socialSignIn = (SocialUser) =>async dispatch=> {
         data: params
     }).then(function (response) {
         dispatch(setToken(response.data.token));
+        dispatch(setUserInfo(response.data.token));
     }).catch(function (error) {
         let errorText = (typeof error.response.data.error !== "undefined") ? error.response.data.error : error.response.data.detail;
         dispatch({

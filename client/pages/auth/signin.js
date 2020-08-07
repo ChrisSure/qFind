@@ -20,7 +20,7 @@ import {useRouter} from "next/router";
 const SignIn = () => {
     const dispatch = useDispatch();
     const router = useRouter();
-    const {email, password, errors, isFormValid} = useSelector(state => state.auth);
+    const {email, password, errors} = useSelector(state => state.auth);
 
     const handleOnSubmit = (event) => {
         event.preventDefault();
