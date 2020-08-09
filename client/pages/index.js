@@ -2,6 +2,7 @@ import Head from 'next/head'
 import styles from './index.scss';
 import Header from "../components/header/header";
 import Footer from "../components/footer/footer";
+import Link from "next/link";
 
 
 export default function Home() {
@@ -15,6 +16,11 @@ export default function Home() {
 
       <main>
           <Header/>
+            <aside>
+                <Link href="/cabinet">
+                    <a>Cabinet</a>
+                </Link>
+            </aside>
           <Footer />
       </main>
     </div>

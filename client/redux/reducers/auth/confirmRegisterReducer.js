@@ -1,4 +1,4 @@
-import * as typesConfirmRegister from "../types/confirmRegisterTypes";
+import * as typesConfirmRegister from "../../types/auth/confirmRegisterTypes";
 
 const initialState = {
     message: '',

@@ -1,5 +1,6 @@
 import axios from 'axios';
-import * as typesConfirmRegister from "../types/confirmRegisterTypes";
+import * as typesConfirmRegister from "../../types/auth/confirmRegisterTypes";
+import {setToken} from "./tokenAction";
 
 export const confirmRegister = (queryString) =>async dispatch=> {
     axios({
@@ -11,6 +12,7 @@ export const confirmRegister = (queryString) =>async dispatch=> {
             message: "You confirmed successfull registration",
             status: "success"
         });
+        dispatch(setToken(response.data.token));
     }).catch(function (error) {
         let errorText = (typeof error.response.data.error !== "undefined") ? error.response.data.error : error.response.data.detail;
         dispatch({

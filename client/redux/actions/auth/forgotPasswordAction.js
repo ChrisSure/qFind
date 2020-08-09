@@ -1,5 +1,5 @@
-import Base from "../helpers/Validation";
-import * as typesForgotPassword from "../types/forgotPasswordTypes";
+import Base from "../../helpers/Validation";
+import * as typesForgotPassword from "../../types/auth/forgotPasswordTypes";
 import axios from "axios";
 
 

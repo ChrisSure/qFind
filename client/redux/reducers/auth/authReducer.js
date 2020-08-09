@@ -1,32 +1,38 @@
-import * as typesForgotPassword from "../types/forgotPasswordTypes";
-import * as types from "../types/authTypes";
+import * as types from "../../types/auth/authTypes";
 
 const initialState = {
     email: '',
+    password: '',
     errors: [],
     message: '',
 };
 
-export const forgotPasswordReducer = (state = initialState, action) => {
+export const authReducer = (state = initialState, action) => {
     switch (action.type) {
-        case typesForgotPassword.FORGOT_PASSWORD_CHANGE_EMAIL:
+        case types.AUTH_CHANGE_EMAIL:
             return {
                 ...state,
                 email:action.email,
             }
-        case typesForgotPassword.FORGOT_PASSWORD_VALIDATION:
+        case types.AUTH_CHANGE_PASSWORD:
+            return {
+                ...state,
+                password: action.password
+            }
+        case types.AUTH_VALIDATION:
             return {
                 ...state,
                 errors: action.errors,
             }
-        case typesForgotPassword.FORGOT_PASSWORD_SUCCESS:
+        case types.AUTH_SIGNUP_SUCCESS:
             return {
                 ...state,
-                message:action.message,
+                message: action.message,
             }
-        case typesForgotPassword.FORGOT_PASSWORD_RESET_FORM:
+        case types.AUTH_RESET_FORM:
             return {
                 email: '',
+                password: '',
                 message: '',
                 errors: [],
             }

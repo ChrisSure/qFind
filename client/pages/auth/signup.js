@@ -1,34 +1,37 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-import styles from "../index.scss";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import styles from '../index.scss';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import {authValidation, resetForm, signup} from "../../redux/actions/auth/authAction";
+import * as types from "../../redux/types/auth/authTypes";
 import {useDispatch, useSelector} from "react-redux";
-import * as typesForgotPassword from "../../redux/types/forgotPasswordTypes";
-import {forgotPasswordValidation, forgotPasswordSend, resetForm} from "../../redux/actions/forgotPasswordAction";
 import Alert from "@material-ui/lab/Alert";
 
 
-
-const forgotPassword = (props) => {
+const SignUp = () => {
     const dispatch = useDispatch();
-    const {email, errors, message} = useSelector(state => state.forgotPassword);
+    const {email, password, errors, message} = useSelector(state => state.auth);
 
     const handleOnSubmit = (event) => {
         event.preventDefault();
 
-        let validationErrors = dispatch(forgotPasswordValidation(email));
+        let validationErrors = dispatch(authValidation(email, password));
         validationErrors.then((count) => {
             if (count === 0) {
-                dispatch(forgotPasswordSend(email));
+                dispatch(signup(email, password));
                 dispatch(resetForm());
             }
         });
     };
 
     const handleOnChangeEmail = (event) => {
-        dispatch({type: typesForgotPassword.FORGOT_PASSWORD_CHANGE_EMAIL, email: event.target.value});
+        dispatch({type: types.AUTH_CHANGE_EMAIL, email: event.target.value});
+    };
+
+    const handleOnChangePassword = (event) => {
+        dispatch({type: types.AUTH_CHANGE_PASSWORD, password: event.target.value});
     };
 
     return (
@@ -39,7 +42,7 @@ const forgotPassword = (props) => {
                     <Alert key={item} severity="error">{item}</Alert>
                 ))}
                 {message !== '' ? (<Alert severity="success">{message}</Alert>) : null}
-                <h1>Forgot password</h1>
+                <h1>SignUp</h1>
                 <form type="POST" className={styles.root} noValidate autoComplete="off" onSubmit={handleOnSubmit}>
                     <ul>
                         <li>
@@ -53,7 +56,18 @@ const forgotPassword = (props) => {
                             />
                         </li>
                         <li>
-                            <Button type="submit" variant="contained" color="primary">Submit</Button>
+                            <TextField
+                                id="outlined-basic-password"
+                                label="Password"
+                                variant="outlined"
+                                type="password"
+                                name="password"
+                                value={password}
+                                onChange={handleOnChangePassword}
+                            />
+                        </li>
+                        <li>
+                            <Button type="submit" variant="contained" color="primary">Login</Button>
                         </li>
                     </ul>
                 </form>
@@ -63,4 +77,4 @@ const forgotPassword = (props) => {
     )
 }
 
-export default forgotPassword;
+export default SignUp
