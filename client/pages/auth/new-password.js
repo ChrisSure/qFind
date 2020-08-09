@@ -5,9 +5,9 @@ import styles from "../index.scss";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import {useDispatch, useSelector} from "react-redux";
-import * as typesNewPassword from "../../redux/types/newPasswordTypes";
+import * as typesNewPassword from "../../redux/types/auth/newPasswordTypes";
 import Alert from "@material-ui/lab/Alert";
-import {confirmNewPassword, newPasswordValidation, newPasswordSend, resetForm} from "../../redux/actions/newPasswordAction";
+import {confirmNewPassword, newPasswordValidation, newPasswordSend, resetForm} from "../../redux/actions/auth/newPasswordAction";
 import * as qs from 'query-string';
 import Router from 'next/router'
 

@@ -1,4 +1,4 @@
-import * as typesToken from "../types/tokenTypes";
+import * as typesToken from "../../types/auth/tokenTypes";
 
 export const setToken = (token) =>async dispatch=>{
     if (token) {
@@ -17,4 +17,11 @@ export const getToken = () =>async dispatch=>{
         token: token,
     });
     return token;
+}
+
+export const removeToken = () =>async dispatch=>{
+    localStorage.removeItem('jwt_token');
+    dispatch({
+        type: typesToken.TOKEN_REMOVE_TOKEN,
+    });
 }

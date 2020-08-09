@@ -4,8 +4,8 @@ import Footer from "../../components/footer/footer";
 import styles from '../index.scss';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import {authValidation, resetForm, signup} from "../../redux/actions/authAction";
-import * as types from "../../redux/types/authTypes";
+import {authValidation, resetForm, signup} from "../../redux/actions/auth/authAction";
+import * as types from "../../redux/types/auth/authTypes";
 import {useDispatch, useSelector} from "react-redux";
 import Alert from "@material-ui/lab/Alert";
 

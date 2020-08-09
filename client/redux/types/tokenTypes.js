@@ -1,1 +1,0 @@
-export const TOKEN_SET_TOKEN = 'TOKEN_SET_TOKEN';

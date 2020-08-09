@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-import {confirmRegister} from "../../redux/actions/confirmRegisterAction";
+import {confirmRegister} from "../../redux/actions/auth/confirmRegisterAction";
 import {useDispatch, useSelector} from "react-redux";
 import Alert from "@material-ui/lab/Alert";
 

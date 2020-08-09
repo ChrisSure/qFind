@@ -1,4 +1,4 @@
-import * as typesNewPassword from "../types/newPasswordTypes";
+import * as typesNewPassword from "../../types/auth/newPasswordTypes";
 
 const initialState = {
     password: '',

@@ -1,5 +1,5 @@
-import * as typesAuth from "../types/authTypes";
-import Base from "../helpers/Validation";
+import * as typesAuth from "../../types/auth/authTypes";
+import Base from "../../helpers/Validation";
 import axios from 'axios';
 import {setToken} from "./tokenAction";
 import {setUserInfo} from "./userInfoAction";

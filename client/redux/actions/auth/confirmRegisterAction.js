@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as typesConfirmRegister from "../types/confirmRegisterTypes";
+import * as typesConfirmRegister from "../../types/auth/confirmRegisterTypes";
 import {setToken} from "./tokenAction";
 
 export const confirmRegister = (queryString) =>async dispatch=> {

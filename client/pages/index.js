@@ -20,9 +20,6 @@ export default function Home() {
                 <Link href="/cabinet">
                     <a>Cabinet</a>
                 </Link>
-                <Link href="/cabinet/home">
-                    <a>Cabinet.Home</a>
-                </Link>
             </aside>
           <Footer />
       </main>

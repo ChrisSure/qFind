@@ -5,8 +5,8 @@ import styles from "../index.scss";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import {useDispatch, useSelector} from "react-redux";
-import * as typesForgotPassword from "../../redux/types/forgotPasswordTypes";
-import {forgotPasswordValidation, forgotPasswordSend, resetForm} from "../../redux/actions/forgotPasswordAction";
+import * as typesForgotPassword from "../../redux/types/auth/forgotPasswordTypes";
+import {forgotPasswordValidation, forgotPasswordSend, resetForm} from "../../redux/actions/auth/forgotPasswordAction";
 import Alert from "@material-ui/lab/Alert";
 
 

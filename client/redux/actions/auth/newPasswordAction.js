@@ -1,6 +1,6 @@
 import axios from "axios";
-import * as typesNewPassword from "../types/newPasswordTypes";
-import Base from "../helpers/Validation";
+import * as typesNewPassword from "../../types/auth/newPasswordTypes";
+import Base from "../../helpers/Validation";
 import {setToken} from "./tokenAction";
 
 export const confirmNewPassword = (queryString) =>async dispatch=> {

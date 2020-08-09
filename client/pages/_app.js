@@ -3,7 +3,7 @@ import {Provider, useDispatch, useSelector} from 'react-redux'
 import {createWrapper} from "next-redux-wrapper";
 import store from '../redux/store';
 import { useRouter } from 'next/router';
-import {getToken} from "../redux/actions/tokenAction";
+import {getToken} from "../redux/actions/auth/tokenAction";
 
 
 const myApp = (props) => {

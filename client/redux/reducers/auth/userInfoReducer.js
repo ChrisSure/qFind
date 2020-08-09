@@ -1,4 +1,4 @@
-import * as types from "../types/userInfoTypes";
+import * as types from "../../types/auth/userInfoTypes";
 
 const initialState = {
     userEmail: '',
@@ -14,6 +14,13 @@ export const userInfoReducer = (state = initialState, action) => {
                 userEmail:action.userEmail,
                 userId:action.userId,
                 userRole:action.userRole,
+            }
+        case types.USER_INFO_REMOVE_DATA:
+            return {
+                ...state,
+                userEmail:'',
+                userId:'',
+                userRole:'',
             }
         default:
             return state;
