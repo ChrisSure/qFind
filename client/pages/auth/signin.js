@@ -7,27 +7,29 @@ import Button from '@material-ui/core/Button';
 import Link from "next/link";
 import Grid from '@material-ui/core/Grid';
 import {useDispatch, useSelector} from "react-redux";
-import * as types from "../../redux/types/authTypes";
-import {authValidation, resetForm, socialSignIn} from "../../redux/actions/authAction";
-import {signin} from "../../redux/actions/authAction";
+import * as types from "../../redux/types/auth/authTypes";
+import {authValidation, resetForm, socialSignIn} from "../../redux/actions/auth/authAction";
+import {signin} from "../../redux/actions/auth/authAction";
 import Alert from '@material-ui/lab/Alert';
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
 import {SocialUser} from "../../models/auth/SocialUser";
+import {useRouter} from "next/router";
 
 
 const SignIn = () => {
     const dispatch = useDispatch();
+    const router = useRouter();
     const {email, password, errors} = useSelector(state => state.auth);
 
     const handleOnSubmit = (event) => {
         event.preventDefault();
 
-        let validationErrors = dispatch(authValidation(email, password));
+        const validationErrors = dispatch(authValidation(email, password));
         validationErrors.then((count) => {
             if (count === 0) {
-                dispatch(signin(email, password));
                 dispatch(resetForm());
+                dispatch(signin(email, password));
             }
         });
     };
@@ -53,6 +55,7 @@ const SignIn = () => {
         socialUser.appId = response.id;
 
         dispatch(socialSignIn(socialUser));
+        redirectAfterLogin();
     }
 
     const responseGoogle = (response) => {
@@ -64,6 +67,11 @@ const SignIn = () => {
         socialUser.appId = response.googleId;
 
         dispatch(socialSignIn(socialUser));
+        redirectAfterLogin();
+    }
+
+    const redirectAfterLogin = () => {
+        router.push('/');
     }
 
     return (
@@ -103,7 +111,7 @@ const SignIn = () => {
                                     <Button type="submit" variant="contained" color="primary">Login</Button>
                                 </li>
                                 <li className={styles.forgot}>
-                                    <Link href="/forgot-password">Forgot password</Link>
+                                    <Link href="/auth/forgot-password">Forgot password</Link>
                                 </li>
                                 <li>
                                     <FacebookLogin
@@ -129,7 +137,7 @@ const SignIn = () => {
                         <ul>
                             <li>
                                 <Button variant="contained" color="secondary">
-                                    <Link href="/signup">
+                                    <Link href="/auth/signup">
                                         <a onClick={resetFormAll}> Create account</a>
                                     </Link>
                                 </Button>

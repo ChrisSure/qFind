@@ -1,37 +1,34 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-import styles from '../index.scss';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import {authValidation, resetForm, signup} from "../../redux/actions/authAction";
-import * as types from "../../redux/types/authTypes";
+import styles from "../index.scss";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 import {useDispatch, useSelector} from "react-redux";
+import * as typesForgotPassword from "../../redux/types/auth/forgotPasswordTypes";
+import {forgotPasswordValidation, forgotPasswordSend, resetForm} from "../../redux/actions/auth/forgotPasswordAction";
 import Alert from "@material-ui/lab/Alert";
 
 
-const SignUp = () => {
+
+const forgotPassword = () => {
     const dispatch = useDispatch();
-    const {email, password, errors, message} = useSelector(state => state.auth);
+    const {email, errors, message} = useSelector(state => state.forgotPassword);
 
     const handleOnSubmit = (event) => {
         event.preventDefault();
 
-        let validationErrors = dispatch(authValidation(email, password));
+        let validationErrors = dispatch(forgotPasswordValidation(email));
         validationErrors.then((count) => {
             if (count === 0) {
-                dispatch(signup(email, password));
+                dispatch(forgotPasswordSend(email));
                 dispatch(resetForm());
             }
         });
     };
 
     const handleOnChangeEmail = (event) => {
-        dispatch({type: types.AUTH_CHANGE_EMAIL, email: event.target.value});
-    };
-
-    const handleOnChangePassword = (event) => {
-        dispatch({type: types.AUTH_CHANGE_PASSWORD, password: event.target.value});
+        dispatch({type: typesForgotPassword.FORGOT_PASSWORD_CHANGE_EMAIL, email: event.target.value});
     };
 
     return (
@@ -42,7 +39,7 @@ const SignUp = () => {
                     <Alert key={item} severity="error">{item}</Alert>
                 ))}
                 {message !== '' ? (<Alert severity="success">{message}</Alert>) : null}
-                <h1>SignUp</h1>
+                <h1>Forgot password</h1>
                 <form type="POST" className={styles.root} noValidate autoComplete="off" onSubmit={handleOnSubmit}>
                     <ul>
                         <li>
@@ -56,18 +53,7 @@ const SignUp = () => {
                             />
                         </li>
                         <li>
-                            <TextField
-                                id="outlined-basic-password"
-                                label="Password"
-                                variant="outlined"
-                                type="password"
-                                name="password"
-                                value={password}
-                                onChange={handleOnChangePassword}
-                            />
-                        </li>
-                        <li>
-                            <Button type="submit" variant="contained" color="primary">Login</Button>
+                            <Button type="submit" variant="contained" color="primary">Submit</Button>
                         </li>
                     </ul>
                 </form>
@@ -77,4 +63,4 @@ const SignUp = () => {
     )
 }
 
-export default SignUp
+export default forgotPassword;
