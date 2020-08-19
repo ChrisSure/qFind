@@ -52,4 +52,35 @@
         <h4>Not record ...</h4>
     @endif
 
+    @if(!(empty($user->social)))
+        <hr/>
+        <p>
+            <a class="btn btn-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Show social networks
+            </a>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>App id</th>
+                    <th>Provider</th>
+                    <th>Name</th>
+                    <th>Image</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach ($user->social as $social)
+                    <tr>
+                        <td>{{ $social->appId }}</td>
+                        <td>{{ $social->provider }}</td>
+                        <td>{{ $social->name }}</td>
+                        <td><img src="{{ $social->image }}" style="height: 70px;"/></td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+
 @endsection

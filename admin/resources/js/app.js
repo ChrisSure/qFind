@@ -1,5 +1,4 @@
 require('./bootstrap');
-window.$ = require('jquery');
 
 
 /* Confirm delete action */
