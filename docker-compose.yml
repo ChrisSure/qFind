@@ -52,13 +52,6 @@ services:
             - "MYSQL_DATABASE=nyfind-test"
         ports:
             - "33062:3306"
-    client:
-        build:
-            context: ${PWD}/docker/development/client
-        volumes:
-            - ./client:/app/client
-        ports:
-            - 3000:3000
 networks:
     default:
         ipam:
